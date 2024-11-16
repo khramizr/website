@@ -1,10 +1,11 @@
 // Loading Screen Messages
 const loadingMessages = [
-    "Initializing system...",
-    "Loading modules...",
-    "Configuring settings...",
-    "Starting services...",
-    "System ready."
+    "your internet is slow lol...",
+    "nvm...establishing secure connection...",
+    "loading exclusive content...",
+    "woooo exclusive...",
+    "yes almost there...",
+    "anyway..."
 ];
 
 let messageIndex = 0;
