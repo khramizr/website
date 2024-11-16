@@ -40,9 +40,9 @@ body.dark-mode {
 /* Main Content Styles */
 #main-content {
     display: none; /* Hidden until loading completes */
-    text-align: center;
-    margin-top: 15%;
-    padding: 20px;
+    text-align: right; /* Align text to the right */
+    margin-right: 20px; /* Add margin to give some padding from the edge */
+    padding-top: 15%;
 }
 
 h1 {
