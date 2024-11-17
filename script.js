@@ -23,15 +23,22 @@ function displayLoadingMessages() {
 function applyInitialTheme() {
     const savedTheme = localStorage.getItem('theme');
 
-    if (savedTheme) {
-        // If user has a saved theme preference, use it
-        document.body.classList.toggle('dark-mode', savedTheme === 'dark');
-        document.getElementById('theme-toggle').checked = savedTheme === 'dark';
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('theme-toggle').checked = true;
+    } else if (savedTheme === 'light') {
+        document.body.classList.remove('dark-mode');
+        document.getElementById('theme-toggle').checked = false;
     } else {
-        // No saved preference, use system preference
+        // No saved theme, apply system preference
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.body.classList.toggle('dark-mode', prefersDark);
-        document.getElementById('theme-toggle').checked = prefersDark;
+        if (prefersDark) {
+            document.body.classList.add('dark-mode');
+            document.getElementById('theme-toggle').checked = true;
+        } else {
+            document.body.classList.remove('dark-mode');
+            document.getElementById('theme-toggle').checked = false;
+        }
     }
 }
 
