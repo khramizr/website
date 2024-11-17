@@ -23,22 +23,13 @@ function displayLoadingMessages() {
 function applyInitialTheme() {
     const savedTheme = localStorage.getItem('theme');
 
-    if (savedTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('theme-toggle').checked = true;
-    } else if (savedTheme === 'light') {
-        document.body.classList.remove('dark-mode');
-        document.getElementById('theme-toggle').checked = false;
+    if (savedTheme) {
+        document.body.classList.toggle('dark-mode', savedTheme === 'dark');
+        document.getElementById('theme-toggle').checked = savedTheme === 'dark';
     } else {
-        // No saved theme, apply system preference
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefersDark) {
-            document.body.classList.add('dark-mode');
-            document.getElementById('theme-toggle').checked = true;
-        } else {
-            document.body.classList.remove('dark-mode');
-            document.getElementById('theme-toggle').checked = false;
-        }
+        document.body.classList.toggle('dark-mode', prefersDark);
+        document.getElementById('theme-toggle').checked = prefersDark;
     }
 }
 
