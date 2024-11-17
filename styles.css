@@ -1,4 +1,3 @@
-/* Reset and basic styles */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -7,19 +6,16 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
-/* Root Variables for Light Mode */
 :root {
     --bg-color: #ffffff;
     --text-color: #000000;
 }
 
-/* Dark Mode Variables */
 body.dark-mode {
     --bg-color: #121212;
     --text-color: #ffffff;
 }
 
-/* Loading Screen Styles */
 #loading-screen {
     background-color: #000000;
     color: #00ff00;
@@ -28,20 +24,24 @@ body.dark-mode {
     left: 0;
     width: 100%;
     height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 10px;
 }
 
 #loading-text {
     padding: 20px;
-    font-size: 16px;
+    font-size: 18px;
     white-space: pre-wrap;
     font-family: 'Courier New', Courier, monospace;
 }
 
-/* Main Content Styles */
 #main-content {
-    display: none; /* Hidden until loading completes */
-    text-align: right; /* Align text to the right */
-    margin-right: 20px; /* Add margin to give some padding from the edge */
+    display: none;
+    text-align: right;
+    margin-right: 20px;
     padding-top: 15%;
 }
 
@@ -56,7 +56,6 @@ h2 {
     color: var(--text-color-secondary);
 }
 
-/* Theme Toggle Switch Styles */
 .toggle-container {
     position: absolute;
     top: 20px;
@@ -76,7 +75,6 @@ h2 {
     height: 0;
 }
 
-/* Slider */
 .slider {
     position: absolute;
     cursor: pointer;
@@ -107,4 +105,53 @@ input:checked + .slider {
 
 input:checked + .slider:before {
     transform: translateX(26px);
+}
+
+@media (max-width: 600px) {
+    #loading-text {
+        font-size: 24px;
+        padding: 15px;
+    }
+
+    #main-content {
+        text-align: center;
+        margin-right: 0;
+        padding-top: 10%;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+
+    .toggle-container {
+        top: 10px;
+        right: 10px;
+    }
+}
+
+@media (min-width: 600px) {
+    #loading-text {
+        font-size: 20px;
+        padding: 20px;
+    }
+
+    #main-content {
+        text-align: right;
+        margin-right: 30px;
+        padding-top: 10%;
+    }
+
+    h1 {
+        font-size: 36px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
 }
