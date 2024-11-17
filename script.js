@@ -22,12 +22,18 @@ function displayLoadingMessages() {
 
 function applyInitialTheme() {
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-        document.body.classList.toggle('dark-mode', savedTheme === 'dark');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('theme-toggle').checked = true; // Ensure toggle reflects the dark mode state
+    } else if (savedTheme === 'light') {
+        document.body.classList.remove('dark-mode');
+        document.getElementById('theme-toggle').checked = false; // Ensure toggle reflects the light mode state
     } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         document.body.classList.add('dark-mode');
+        document.getElementById('theme-toggle').checked = true;
     } else {
         document.body.classList.remove('dark-mode');
+        document.getElementById('theme-toggle').checked = false;
     }
 }
 
@@ -42,9 +48,6 @@ function setupThemeToggle() {
             localStorage.setItem('theme', 'light');
         }
     });
-
-    const initialCheckedState = document.body.classList.contains('dark-mode');
-    toggleSwitch.checked = initialCheckedState;
 }
 
 window.onload = function() {
