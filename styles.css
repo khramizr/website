@@ -16,6 +16,19 @@ body.dark-mode {
     --text-color: #ffffff;
 }
 
+/* Automatically set dark mode based on system preference */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #121212;
+        --text-color: #ffffff;
+    }
+
+    body:not(.dark-mode) {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+    }
+}
+
 #loading-screen {
     background-color: #000000;
     color: #00ff00;
