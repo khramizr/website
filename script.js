@@ -26,15 +26,21 @@ function applyInitialTheme() {
         document.body.classList.toggle('dark-mode', savedTheme === 'dark');
     } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.remove('dark-mode');
     }
 }
 
 function setupThemeToggle() {
     const toggleSwitch = document.getElementById('theme-toggle');
     toggleSwitch.addEventListener('change', function() {
-        const isDarkMode = this.checked;
-        document.body.classList.toggle('dark-mode', isDarkMode);
-        localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        if (this.checked) {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('theme', 'light');
+        }
     });
 
     const initialCheckedState = document.body.classList.contains('dark-mode');
