@@ -43,14 +43,7 @@ body.dark-theme {
   color: var(--color-text-dark);
 }
 
-/* Header container for both pages */
-.header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  flex-wrap: wrap;
-}
+
 
 /* Logo style */
 .logo {
