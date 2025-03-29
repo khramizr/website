@@ -53,10 +53,10 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-const clickableHero = document.querySelector('.hero') || document.querySelector('.blog-hero');
-if (clickableHero) {
-  clickableHero.style.cursor = 'pointer';
-  clickableHero.addEventListener('click', () => {
+const logo = document.querySelector('.logo');
+if (logo) {
+  logo.style.cursor = 'pointer';
+  logo.addEventListener('click', () => {
     window.location.href = 'index.html';
   });
 }
