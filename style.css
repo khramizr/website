@@ -331,3 +331,19 @@ footer {
   color: #007acc;
   transform: scale(1.05);
 }
+
+.image-placeholder {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.image-placeholder img {
+  max-width: 80%;
+  width: 100%;
+  max-height: 500px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
