@@ -1,10 +1,8 @@
-
 window.addEventListener('DOMContentLoaded', () => {
   const body = document.body;
   const toggleIndex = document.getElementById('slider');
   const toggleBlog = document.getElementById('slider-blog');
-  
-  // Function to set theme
+
   function setTheme(isDark) {
     if (isDark) {
       body.classList.add('dark-theme');
@@ -15,10 +13,8 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-
   let storedTheme = localStorage.getItem('theme');
   if (!storedTheme) {
-    // No stored preference, check system
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       setTheme(true);
       if (toggleIndex) toggleIndex.checked = true;
@@ -27,7 +23,6 @@ window.addEventListener('DOMContentLoaded', () => {
       setTheme(false);
     }
   } else {
-
     if (storedTheme === 'dark') {
       setTheme(true);
       if (toggleIndex) toggleIndex.checked = true;
@@ -37,7 +32,6 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-
   if (toggleIndex) {
     toggleIndex.addEventListener('change', (e) => {
       setTheme(e.target.checked);
@@ -46,6 +40,15 @@ window.addEventListener('DOMContentLoaded', () => {
   if (toggleBlog) {
     toggleBlog.addEventListener('change', (e) => {
       setTheme(e.target.checked);
+    });
+  }
+  
+
+  const menuToggle = document.querySelector('.menu-toggle');
+  const navMenu = document.querySelector('.nav-menu');
+  if (menuToggle) {
+    menuToggle.addEventListener('click', () => {
+      navMenu.style.display = navMenu.style.display === 'block' ? 'none' : 'block';
     });
   }
 });
