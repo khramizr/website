@@ -52,3 +52,12 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+const clickableHero = document.querySelector('.hero') || document.querySelector('.blog-hero');
+if (clickableHero) {
+  clickableHero.style.cursor = 'pointer';
+  clickableHero.addEventListener('click', () => {
+    window.location.href = 'index.html';
+  });
+}
+
