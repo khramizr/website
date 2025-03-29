@@ -1,31 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ramiz's Site</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ramiz Rahman</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div id="loading-screen">
-        <pre id="loading-text"></pre>
-    </div>
+  <header>
+    <nav>
+      <div class="logo">Ramiz</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="https://twitter.com/kramizr" target="_blank">Twitter</a></li>
+        <li><a href="https://www.linkedin.com/in/ramizr/" target="_blank">LinkedIn</a></li>
+        <li><a href="https://www.instagram.com/philonoistr/" target="_blank">Instagram</a></li>
+      </ul>
+      <div class="theme-switcher">
+        <input type="checkbox" id="slider" aria-label="Theme Switch">
+        <label for="slider"></label>
+      </div>
+    </nav>
+  </header>
 
-    <!-- Main Content -->
-    <div id="main-content">
-        <!-- Theme Toggle Switch -->
-        <div class="toggle-container">
-            <label class="switch">
-                <input type="checkbox" id="theme-toggle">
-                <span class="slider"></span>
-            </label>
-        </div>
-        <!-- Your HTML Content -->
-        <h1>hi, this is the site of ramiz. he's too lazy to build a website.</h1>
-        <h2>if you want to talk to him, search ramiz rahman on google and hope it's his linkedin on top</h2>
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Ramiz Rahman</h1>
+      <p>I like 0s and 1s.</p>
+      <img src="https://u.cubeupload.com/ramiz/IMG20240315221506109.jpg" alt="Profile Image" class="profile-pic">
     </div>
+    
+    <div class="hero-art"></div>
+  </section>
 
-    <script src="script.js"></script>
+  <section class="work">
+    <h2>My Work</h2>
+    <div class="work-details">
+      <article>
+        <h3>Director - CodeDay Labs</h3>
+        <p>Overseeing open-source internship experiences for students who can’t participate in traditional internships. Leading projects and mentorship.</p>
+      </article>
+      <article>
+        <h3>Head of Product - STEMpowered</h3>
+        <p>Developed strategic product roadmaps and oversaw product launches for STEM education initiatives.</p>
+      </article>
+      <article>
+        <h3>Research and Development - EDUDIGM EDUCATION</h3>
+        <p>Engaged in R&D projects to improve software development and educational tools.</p>
+      </article>
+      <article>
+        <h3>Mentor Manager - CodeDay</h3>
+        <p>Guided mentors and helped create a collaborative environment for young technologists and open-source contributors.</p>
+      </article>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Ramiz Rahman</p>
+  </footer>
 </body>
 </html>
