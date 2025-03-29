@@ -270,3 +270,26 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+.blog-link {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: rgba(0,0,0,0.1);
+  border-radius: 4px;
+  text-decoration: none;
+  color: inherit;
+}
+.blog-link:hover {
+  background: rgba(0,0,0,0.2);
+}
+
+.footer-social {
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+.footer-social a {
+  margin: 0 0.5rem;
+  text-decoration: none;
+  color: inherit;
+}
