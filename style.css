@@ -352,3 +352,12 @@ footer {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+.post-note {
+  margin: 2rem auto;
+  max-width: 800px;
+  padding: 1rem 1.5rem;
+  background-color: var(--highlight-bg, #f9f9f9);
+  border-left: 4px solid var(--accent-color, #007acc);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
