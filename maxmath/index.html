@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Max vs Oscar - F1 2025 Championship Battle - UPDATED</title>
+    <title>Max vs Oscar - F1 2025 Championship Battle</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
     <style>
         * {
@@ -18,7 +18,7 @@
             padding: 20px;
         }
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
@@ -28,7 +28,7 @@
         h1 {
             text-align: center;
             margin-bottom: 10px;
-            font-size: 2.5em;
+            font-size: 2.8em;
             background: linear-gradient(45deg, #E30118, #FF8700);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -38,150 +38,154 @@
             text-align: center;
             color: #aaa;
             margin-bottom: 20px;
-            font-size: 1.1em;
+            font-size: 1.2em;
         }
         .update-banner {
             background: linear-gradient(45deg, #00ff00, #00cc00);
             color: #000;
-            padding: 15px;
+            padding: 20px;
             border-radius: 10px;
             text-align: center;
             font-weight: bold;
-            margin-bottom: 20px;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 255, 0, 0.3);
         }
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
             margin-bottom: 30px;
         }
         .stat-card {
             background: rgba(255, 255, 255, 0.08);
-            padding: 20px;
-            border-radius: 10px;
+            padding: 25px;
+            border-radius: 12px;
             text-align: center;
             transition: transform 0.3s;
+            border-top: 4px solid;
         }
         .stat-card:hover {
             transform: translateY(-5px);
         }
         .stat-card.max {
-            border-top: 3px solid #E30118;
+            border-top-color: #E30118;
         }
         .stat-card.oscar {
-            border-top: 3px solid #FF8700;
+            border-top-color: #FF8700;
         }
         .stat-card.gap {
-            border-top: 3px solid #00ff00;
+            border-top-color: #00ff00;
         }
         .stat-header {
-            font-size: 0.9em;
+            font-size: 1em;
             color: #aaa;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         .stat-value {
-            font-size: 2.5em;
+            font-size: 3em;
             font-weight: bold;
             color: #fff;
+            margin-bottom: 8px;
         }
         .stat-label {
-            font-size: 0.85em;
+            font-size: 0.9em;
             color: #999;
-            margin-top: 5px;
         }
         .chart-wrapper {
             position: relative;
-            height: 600px;
+            height: 700px;
             margin-bottom: 30px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 20px;
         }
         .legend-custom {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 15px;
             margin-top: 30px;
         }
         .legend-item {
             display: flex;
             align-items: center;
-            padding: 12px;
+            padding: 15px;
             background: rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
+            border-radius: 10px;
             transition: all 0.3s;
+            cursor: pointer;
         }
         .legend-item:hover {
             background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
         .legend-color {
-            width: 30px;
+            width: 35px;
             height: 4px;
-            margin-right: 10px;
+            margin-right: 12px;
             border-radius: 2px;
         }
         .legend-text {
-            font-size: 0.9em;
+            font-size: 0.95em;
+            font-weight: 500;
         }
         .info-box {
             background: rgba(227, 1, 24, 0.1);
-            border-left: 4px solid #E30118;
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 5px;
+            border-left: 5px solid #E30118;
+            padding: 20px;
+            margin-top: 25px;
+            border-radius: 8px;
         }
         .info-box h3 {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             color: #FF8700;
+            font-size: 1.3em;
         }
         .info-box ul {
             list-style: none;
             padding-left: 0;
         }
         .info-box li {
-            padding: 5px 0;
+            padding: 8px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1.05em;
+        }
+        .info-box li:last-child {
+            border-bottom: none;
         }
         .sprint-indicator {
             color: #FDD900;
             font-weight: bold;
-        }
-        .momentum-indicator {
-            background: rgba(0, 255, 0, 0.1);
-            border-left: 4px solid #00ff00;
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 5px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🏁 F1 2025 Championship Battle</h1>
-        <p class="subtitle">Max Verstappen vs Oscar Piastri - Updated After Austin</p>
+        <p class="subtitle">Max Verstappen vs Oscar Piastri - Point Difference Analysis</p>
         
         <div class="update-banner">
-            ✅ UPDATED: Max wins Austin Sprint + GP! Gap reduced to 51 points!
+            ✅ AUSTIN RESULTS: Max wins Sprint (Oscar DNF) + Max wins Race (Oscar P5) → Gap reduced from 63 to 40 points!
         </div>
 
         <div class="stats-grid">
             <div class="stat-card max">
                 <div class="stat-header">Max Verstappen</div>
-                <div class="stat-value">284 pts</div>
-                <div class="stat-label">Recent: P1 Sprint + P1 Race</div>
+                <div class="stat-value">296</div>
+                <div class="stat-label">Sprint: P1 (8pts) | Race: P1 (25pts)</div>
             </div>
             <div class="stat-card gap">
-                <div class="stat-header">Championship Gap</div>
-                <div class="stat-value">51</div>
-                <div class="stat-label">Oscar still leads</div>
+                <div class="stat-header">Current Gap</div>
+                <div class="stat-value">40</div>
+                <div class="stat-label">Oscar still leads | Down from 63</div>
             </div>
             <div class="stat-card oscar">
                 <div class="stat-header">Oscar Piastri</div>
-                <div class="stat-value">335 pts</div>
-                <div class="stat-label">Recent: P3 Sprint + P2 Race</div>
+                <div class="stat-value">336</div>
+                <div class="stat-label">Sprint: DNF (0pts) | Race: P5 (10pts)</div>
             </div>
         </div>
         
@@ -191,20 +195,20 @@
 
         <div class="legend-custom">
             <div class="legend-item">
-                <div class="legend-color" style="background: #fff; height: 3px;"></div>
+                <div class="legend-color" style="background: #fff; height: 4px;"></div>
                 <div class="legend-text">⚪ Historical Data (Actual)</div>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #00ff00;"></div>
-                <div class="legend-text">🟢 Current Trend (12 pts/race avg)</div>
+                <div class="legend-text">🟢 Current Trend (13.5 pts/race)</div>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #00d4ff;"></div>
-                <div class="legend-text">🔵 Optimistic (15 pts/race)</div>
+                <div class="legend-text">🔵 Optimistic (16 pts/race)</div>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #ffaa00;"></div>
-                <div class="legend-text">🟠 Conservative (9 pts/race)</div>
+                <div class="legend-text">🟠 Conservative (10 pts/race)</div>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #ff00ff;"></div>
@@ -216,26 +220,19 @@
             </div>
         </div>
 
-        <div class="momentum-indicator">
-            <h3>🚀 Max's Momentum</h3>
-            <ul>
-                <li><strong>Last 2 Races (Austin):</strong> +12 points gained total</li>
-                <li><strong>Austin Sprint:</strong> Max P1 (8pts), Oscar P3 (6pts) = +2 pts</li>
-                <li><strong>Austin GP:</strong> Max P1 (25pts), Oscar P2 (18pts) = +7 pts</li>
-                <li><strong>New Average Gain:</strong> ~11.5 points per race weekend</li>
-            </ul>
-        </div>
-
         <div class="info-box">
-            <h3>📊 Updated Championship Math</h3>
+            <h3>📊 Championship Mathematics - Updated After Austin</h3>
             <ul>
-                <li><strong>Current Gap:</strong> 51 points (down from 63)</li>
-                <li><strong>Points Gained at Austin:</strong> 12 points</li>
-                <li><strong>Remaining Points:</strong> 141 total (125 from 5 GPs + 16 from 2 Sprints)</li>
-                <li><strong>Remaining Sprint Races:</strong> <span class="sprint-indicator">★ Brazil, Qatar</span></li>
-                <li><strong>Remaining Regular GPs:</strong> Mexico, Brazil, Las Vegas, Qatar, Abu Dhabi</li>
-                <li><strong>Max's Updated Trend:</strong> Gaining ~12 pts/race (up from 10.25)</li>
-                <li><strong>Races to Championship:</strong> ~4.25 races at current pace!</li>
+                <li><strong>Starting Gap (Singapore):</strong> 63 points</li>
+                <li><strong>Austin Sprint:</strong> Max P1 (8pts), Oscar DNF (0pts) → Max gains +8 → Gap: 55 points</li>
+                <li><strong>Austin GP:</strong> Max P1 (25pts), Oscar P5 (10pts) → Max gains +15 → Gap: 40 points</li>
+                <li><strong>Total Gained at Austin:</strong> 23 points in one weekend!</li>
+                <li><strong>Current Championship Gap:</strong> 40 points (Oscar leads)</li>
+                <li><strong>Remaining Points Available:</strong> 141 total (125 from 5 GPs + 16 from 2 Sprints)</li>
+                <li><strong>Sprint Races Remaining:</strong> <span class="sprint-indicator">★ Brazil (Nov 7-9), Qatar (Nov 28-30)</span></li>
+                <li><strong>Regular GPs Remaining:</strong> Mexico, Brazil, Las Vegas, Qatar, Abu Dhabi</li>
+                <li><strong>Max's Recent Average:</strong> 13.5 points gained per race/sprint event</li>
+                <li><strong>Races Needed:</strong> ~3 more races at current pace to take the lead!</li>
             </ul>
         </div>
     </div>
@@ -248,18 +245,75 @@
             'Qatar Sprint', 'Qatar GP', 'Abu Dhabi'
         ];
 
-        // UPDATED: Historical data including Austin
-        const historical = [104, 94, 69, 63, 61, 51];
+        // ACCURATE Historical Data
+        // Singapore: 63 pts gap
+        // Austin Sprint: Max P1 (8), Oscar DNF (0) → gap reduced by 8 → 55
+        // Austin GP: Max P1 (25), Oscar P5 (10) → gap reduced by 15 → 40
+        const historical = [104, 94, 69, 63, 55, 40];
         
-        // UPDATED: Future predictions starting from current gap of 51
-        // New average: (41 + 12) / 6 races = ~8.8, but last 2 races = 12/2 = 6 per event
-        // So for full race weekends: ~12 pts, for single races: ~10 pts, for sprints: ~2 pts
+        // Calculate predictions starting from 40
+        // Recent gains: Monza to Baku (25), Baku to Singapore (6), Austin Sprint (8), Austin GP (15)
+        // Last 4 events average: (25 + 6 + 8 + 15) / 4 = 13.5 pts/event
         
-        const currentTrend = [51, 41, 39, 29, 19, 17, 7, -3];  // 10 pts/GP, 2 pts/sprint
-        const optimistic = [51, 36, 34, 19, 4, 3, -12, -27];   // 15 pts/GP, 2 pts/sprint  
-        const conservative = [51, 42, 40.5, 31.5, 22.5, 21, 12, 3];  // 9 pts/GP, 1.5 pts/sprint
-        const bestCase = [51, 31, 29, 9, -11, -12, -32, -52];  // Max dominance
-        const mixedRealistic = [51, 44, 42, 35, 28, 27, 20, 15];  // Variable results
+        // SCENARIO 1: Current Trend (13.5 pts/race, 3 pts/sprint)
+        const currentTrend = [
+            40,      // Starting point
+            37,      // Mexico GP: -3
+            27,      // Brazil Sprint: -10
+            25,      // Brazil GP: -2
+            15,      // Las Vegas: -10
+            12,      // Qatar Sprint: -3
+            2,       // Qatar GP: -10
+            -8       // Abu Dhabi: -10
+        ];
+        
+        // SCENARIO 2: Optimistic (16 pts/race, 4 pts/sprint)
+        const optimistic = [
+            40,      // Starting
+            24,      // Mexico: -16
+            20,      // Brazil Sprint: -4
+            4,       // Brazil GP: -16
+            -12,     // Las Vegas: -16
+            -16,     // Qatar Sprint: -4
+            -32,     // Qatar GP: -16
+            -48      // Abu Dhabi: -16
+        ];
+        
+        // SCENARIO 3: Conservative (10 pts/race, 2 pts/sprint)
+        const conservative = [
+            40,      // Starting
+            30,      // Mexico: -10
+            28,      // Brazil Sprint: -2
+            18,      // Brazil GP: -10
+            8,       // Las Vegas: -10
+            6,       // Qatar Sprint: -2
+            -4,      // Qatar GP: -10
+            -14      // Abu Dhabi: -10
+        ];
+        
+        // SCENARIO 4: Best Case (Max wins all, Oscar P3-P5)
+        const bestCase = [
+            40,      // Starting
+            20,      // Mexico: Max P1 (25), Oscar P4 (12) = -13, actual -20 for dominance
+            17,      // Brazil Sprint: Max P1 (8), Oscar P4 (5) = -3
+            -3,      // Brazil GP: Max P1 (25), Oscar P5 (10) = -15, use -20
+            -23,     // Las Vegas: -20
+            -26,     // Qatar Sprint: -3
+            -46,     // Qatar GP: -20
+            -66      // Abu Dhabi: -20
+        ];
+        
+        // SCENARIO 5: Mixed Realistic (varying results)
+        const mixedRealistic = [
+            40,      // Starting
+            33,      // Mexico: Max P2, Oscar P1 = -7
+            31,      // Brazil Sprint: -2
+            16,      // Brazil GP: Max P1, Oscar P3 = -15
+            6,       // Las Vegas: -10
+            4,       // Qatar Sprint: -2
+            -4,      // Qatar GP: -8
+            2        // Abu Dhabi: Oscar P1, Max P2 = +6
+        ];
 
         const ctx = document.getElementById('championshipChart').getContext('2d');
         
@@ -270,64 +324,66 @@
                 datasets: [
                     {
                         label: 'Historical (Actual)',
-                        data: [104, 94, 69, 63, 61, 51, null, null, null, null, null, null, null],
+                        data: [104, 94, 69, 63, 55, 40, null, null, null, null, null, null, null],
                         borderColor: '#ffffff',
                         backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                        borderWidth: 5,
+                        pointRadius: 8,
+                        pointHoverRadius: 10,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: '#E30118',
+                        pointBorderWidth: 3,
+                        tension: 0.3,
+                        fill: false
+                    },
+                    {
+                        label: 'Current Trend (13.5 pts/race avg)',
+                        data: [null, null, null, null, null, ...currentTrend],
+                        borderColor: '#00ff00',
+                        backgroundColor: 'rgba(0, 255, 0, 0.08)',
                         borderWidth: 4,
                         pointRadius: 6,
                         pointHoverRadius: 8,
-                        pointBackgroundColor: '#ffffff',
-                        pointBorderColor: '#E30118',
-                        pointBorderWidth: 2,
-                        tension: 0.3
-                    },
-                    {
-                        label: 'Current Trend',
-                        data: [null, null, null, null, null, ...currentTrend],
-                        borderColor: '#00ff00',
-                        backgroundColor: 'rgba(0, 255, 0, 0.05)',
-                        borderWidth: 3,
-                        pointRadius: 5,
-                        pointHoverRadius: 7,
                         pointStyle: 'circle',
                         tension: 0.3,
-                        borderDash: [5, 5]
+                        borderDash: [8, 4],
+                        fill: true
                     },
                     {
-                        label: 'Optimistic',
+                        label: 'Optimistic (16 pts/race)',
                         data: [null, null, null, null, null, ...optimistic],
                         borderColor: '#00d4ff',
                         backgroundColor: 'rgba(0, 212, 255, 0.05)',
                         borderWidth: 3,
-                        pointRadius: 4,
-                        pointHoverRadius: 6,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
                         pointStyle: 'triangle',
                         tension: 0.3,
-                        borderDash: [10, 5]
+                        borderDash: [12, 6]
                     },
                     {
-                        label: 'Conservative',
+                        label: 'Conservative (10 pts/race)',
                         data: [null, null, null, null, null, ...conservative],
                         borderColor: '#ffaa00',
                         backgroundColor: 'rgba(255, 170, 0, 0.05)',
                         borderWidth: 3,
-                        pointRadius: 4,
-                        pointHoverRadius: 6,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
                         pointStyle: 'rect',
                         tension: 0.3,
-                        borderDash: [3, 3]
+                        borderDash: [4, 4]
                     },
                     {
-                        label: 'Best Case',
+                        label: 'Best Case (Max Dominance)',
                         data: [null, null, null, null, null, ...bestCase],
                         borderColor: '#ff00ff',
                         backgroundColor: 'rgba(255, 0, 255, 0.05)',
                         borderWidth: 3,
-                        pointRadius: 4,
-                        pointHoverRadius: 6,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
                         pointStyle: 'rectRot',
                         tension: 0.3,
-                        borderDash: [15, 5]
+                        borderDash: [16, 8]
                     },
                     {
                         label: 'Mixed Realistic',
@@ -335,11 +391,11 @@
                         borderColor: '#ff4444',
                         backgroundColor: 'rgba(255, 68, 68, 0.05)',
                         borderWidth: 3,
-                        pointRadius: 4,
-                        pointHoverRadius: 6,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
                         pointStyle: 'crossRot',
                         tension: 0.3,
-                        borderDash: [8, 4]
+                        borderDash: [10, 5]
                     }
                 ]
             },
@@ -353,30 +409,37 @@
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Oscar\'s Lead Over Max (Points) - UPDATED After Austin - Negative = Max Leading',
+                        text: 'Oscar\'s Point Lead Over Max | Negative Values = Max Leading',
                         color: '#fff',
                         font: {
-                            size: 16,
+                            size: 18,
                             weight: 'bold'
                         },
-                        padding: 20
+                        padding: 25
                     },
                     legend: {
                         display: false
                     },
                     tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        backgroundColor: 'rgba(0, 0, 0, 0.9)',
                         titleColor: '#FF8700',
                         bodyColor: '#fff',
                         borderColor: '#E30118',
-                        borderWidth: 2,
-                        padding: 12,
+                        borderWidth: 3,
+                        padding: 16,
                         displayColors: true,
+                        titleFont: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
                         callbacks: {
                             title: function(context) {
                                 const label = context[0].label;
                                 const isSprint = label.includes('Sprint');
-                                return (isSprint ? '★ ' : '') + label;
+                                return (isSprint ? '★ ' : '🏁 ') + label;
                             },
                             label: function(context) {
                                 let label = context.dataset.label || '';
@@ -385,10 +448,21 @@
                                 }
                                 if (context.parsed.y !== null) {
                                     const gap = Math.abs(context.parsed.y);
-                                    const leader = context.parsed.y > 0 ? 'Oscar leads' : 'Max leads';
-                                    label += context.parsed.y === 0 ? 'TIED' : `${leader} by ${gap.toFixed(1)} pts`;
+                                    if (context.parsed.y === 0) {
+                                        label += '🏆 CHAMPIONSHIP TIED!';
+                                    } else {
+                                        const leader = context.parsed.y > 0 ? 'Oscar' : 'Max';
+                                        label += `${leader} leads by ${gap} points`;
+                                    }
                                 }
                                 return label;
+                            },
+                            afterLabel: function(context) {
+                                const idx = context.dataIndex;
+                                // Show actual results for completed races
+                                if (idx === 4) return ['Max: P1 (8 pts)', 'Oscar: DNF (0 pts)', 'Max gained: +8 pts'];
+                                if (idx === 5) return ['Max: P1 (25 pts)', 'Oscar: P5 (10 pts)', 'Max gained: +15 pts'];
+                                return null;
                             }
                         }
                     }
@@ -396,41 +470,43 @@
                 scales: {
                     x: {
                         grid: {
-                            color: 'rgba(255, 255, 255, 0.1)',
+                            color: 'rgba(255, 255, 255, 0.15)',
                             drawTicks: true
                         },
                         ticks: {
                             color: '#fff',
                             font: {
-                                size: 11
+                                size: 12,
+                                weight: '500'
                             },
                             maxRotation: 45,
                             minRotation: 45,
                             callback: function(value, index) {
                                 const label = this.getLabelForValue(value);
                                 const isSprint = label.includes('Sprint');
-                                // Highlight Austin races
-                                if (label.includes('Austin')) {
-                                    return '✅ ' + (isSprint ? '★ ' : '') + label;
-                                }
-                                return isSprint ? '★ ' + label : label;
+                                const isAustin = label.includes('Austin');
+                                let prefix = '';
+                                if (isAustin) prefix = '✅ ';
+                                if (isSprint) prefix += '★ ';
+                                return prefix + label;
                             }
                         },
                         border: {
-                            color: 'rgba(255, 255, 255, 0.3)'
+                            color: 'rgba(255, 255, 255, 0.4)',
+                            width: 2
                         }
                     },
                     y: {
                         grid: {
                             color: function(context) {
                                 if (context.tick.value === 0) {
-                                    return 'rgba(0, 0, 0, 0.8)';
+                                    return 'rgba(0, 0, 0, 0.9)';
                                 }
-                                return 'rgba(255, 255, 255, 0.1)';
+                                return 'rgba(255, 255, 255, 0.12)';
                             },
                             lineWidth: function(context) {
                                 if (context.tick.value === 0) {
-                                    return 3;
+                                    return 4;
                                 }
                                 return 1;
                             }
@@ -438,25 +514,29 @@
                         ticks: {
                             color: '#fff',
                             font: {
-                                size: 12
+                                size: 13,
+                                weight: '500'
                             },
                             callback: function(value) {
-                                if (value === 0) return '═══ TIE ═══';
-                                return value > 0 ? `Oscar +${value}` : `Max +${Math.abs(value)}`;
-                            }
+                                if (value === 0) return '🏆═══ TIE ═══🏆';
+                                return value > 0 ? `↑ Oscar +${value}` : `↓ Max +${Math.abs(value)}`;
+                            },
+                            stepSize: 10
                         },
                         border: {
-                            color: 'rgba(255, 255, 255, 0.3)',
-                            dash: [5, 5]
+                            color: 'rgba(255, 255, 255, 0.4)',
+                            width: 2,
+                            dash: [6, 6]
                         },
                         title: {
                             display: true,
-                            text: 'Championship Points Gap',
+                            text: 'Championship Points Gap (Positive = Oscar Leading)',
                             color: '#FF8700',
                             font: {
-                                size: 14,
+                                size: 15,
                                 weight: 'bold'
-                            }
+                            },
+                            padding: 15
                         }
                     }
                 }
@@ -467,7 +547,7 @@
                     const xAxis = chart.scales.x;
                     const yAxis = chart.scales.y;
                     
-                    // Draw sprint race indicators
+                    // Highlight sprint races with vertical bands
                     const sprintIndices = [4, 7, 10]; // Austin Sprint, Brazil Sprint, Qatar Sprint
                     
                     ctx.save();
@@ -476,9 +556,30 @@
                         const yTop = yAxis.top;
                         const yBottom = yAxis.bottom;
                         
-                        // Highlight Austin sprint with different color
-                        const color = index === 4 ? 'rgba(0, 255, 0, 0.12)' : 'rgba(253, 217, 0, 0.08)';
-                        ctx.fillStyle = color;
-                        ctx.fillRect(x - 15, yTop, 30, yBottom - yTop);
+                        // Highlight completed Austin sprint differently
+                        const color = index === 4 ? 
+                            'rgba(0, 255, 0, 0.15)' : 
+                            'rgba(253, 217, 0, 0.1)';
                         
-                        ctx.strokeStyle = index === 4 ? 'rgba(0, 255, 0, 0.4)' : 'rgba(253, 217, 0,
+                        ctx.fillStyle = color;
+                        ctx.fillRect(x - 18, yTop, 36, yBottom - yTop);
+                        
+                        const strokeColor = index === 4 ? 
+                            'rgba(0, 255, 0, 0.5)' : 
+                            'rgba(253, 217, 0, 0.4)';
+                        
+                        ctx.strokeStyle = strokeColor;
+                        ctx.lineWidth = 2;
+                        ctx.setLineDash([6, 6]);
+                        ctx.beginPath();
+                        ctx.moveTo(x, yTop);
+                        ctx.lineTo(x, yBottom);
+                        ctx.stroke();
+                    });
+                    ctx.restore();
+                }
+            }]
+        });
+    </script>
+</body>
+</html>
