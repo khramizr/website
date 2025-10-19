@@ -174,7 +174,7 @@
         <div class="stats-grid">
             <div class="stat-card max">
                 <div class="stat-header">Max Verstappen</div>
-                <div class="stat-value">296</div>
+                <div class="stat-value">306</div>
                 <div class="stat-label">Sprint: P1 (8pts) | Race: P1 (25pts)</div>
             </div>
             <div class="stat-card gap">
@@ -184,7 +184,7 @@
             </div>
             <div class="stat-card oscar">
                 <div class="stat-header">Oscar Piastri</div>
-                <div class="stat-value">336</div>
+                <div class="stat-value">346</div>
                 <div class="stat-label">Sprint: DNF (0pts) | Race: P5 (10pts)</div>
             </div>
         </div>
@@ -223,6 +223,7 @@
         <div class="info-box">
             <h3>📊 Championship Mathematics - Updated After Austin</h3>
             <ul>
+                <li><strong>Current Standings:</strong> Oscar 346 pts | Max 306 pts</li>
                 <li><strong>Starting Gap (Singapore):</strong> 63 points</li>
                 <li><strong>Austin Sprint:</strong> Max P1 (8pts), Oscar DNF (0pts) → Max gains +8 → Gap: 55 points</li>
                 <li><strong>Austin GP:</strong> Max P1 (25pts), Oscar P5 (10pts) → Max gains +15 → Gap: 40 points</li>
@@ -246,6 +247,7 @@
         ];
 
         // ACCURATE Historical Data
+        // Current: Oscar 346, Max 306 → Gap = 40
         // Singapore: 63 pts gap
         // Austin Sprint: Max P1 (8), Oscar DNF (0) → gap reduced by 8 → 55
         // Austin GP: Max P1 (25), Oscar P5 (10) → gap reduced by 15 → 40
@@ -294,9 +296,9 @@
         // SCENARIO 4: Best Case (Max wins all, Oscar P3-P5)
         const bestCase = [
             40,      // Starting
-            20,      // Mexico: Max P1 (25), Oscar P4 (12) = -13, actual -20 for dominance
-            17,      // Brazil Sprint: Max P1 (8), Oscar P4 (5) = -3
-            -3,      // Brazil GP: Max P1 (25), Oscar P5 (10) = -15, use -20
+            20,      // Mexico: -20
+            17,      // Brazil Sprint: -3
+            -3,      // Brazil GP: -20
             -23,     // Las Vegas: -20
             -26,     // Qatar Sprint: -3
             -46,     // Qatar GP: -20
