@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diwali · Festival of Lights</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@200;300;400;500;600;700&display=swap');
+
+        :root {
+            --gold: #FFD700;
+            --gold-light: #FFF4CC;
+            --orange: #FF6B35;
+            --purple: #8B5CF6;
+            --dark: #1D1D1F;
+            --light: #FBFBFD;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #000000;
+            color: var(--light);
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            transition: all 0.1s ease;
+            z-index: 10000;
+            mix-blend-mode: difference;
+        }
+
+        .cursor.expand {
+            transform: scale(2);
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        /* Canvas for effects */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #fireworks, #particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            background: radial-gradient(ellipse at center, rgba(255, 215, 0, 0.05) 0%, transparent 70%);
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--orange) 50%, var(--purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 8s ease infinite;
+            background-size: 200% 200%;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInScale 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(-10px);
+            }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            width: 30px;
+            height: 50px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            padding-top: 10px;
+        }
+
+        .scroll-indicator::before {
+            content: '';
+            width: 4px;
+            height: 10px;
+            background: var(--gold);
+            border-radius: 2px;
+            animation: scroll 2s infinite;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(15px); opacity: 0; }
+        }
+
+        /* Sections */
+        .section {
+            min-height: 100vh;
+            padding: 100px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Diya Section */
+        .diya-section {
+            background: linear-gradient(180deg, #000000 0%, #0a0a0a 100%);
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .section-title.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .diya-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            max-width: 600px;
+            margin: 0 auto;
+            justify-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .diya-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2.5rem;
+            }
+        }
+
+        .diya-wrapper {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .diya-wrapper:hover {
+            transform: translateY(-10px) scale(1.05);
+        }
+
+        .modern-diya {
+            width: 120px;
+            height: 60px;
+            background: linear-gradient(135deg, #B8860B, #FFD700, #FFA500);
+            border-radius: 50% 50% 50% 50% / 0% 0% 100% 100%;
+            position: relative;
+            box-shadow: 
+                0 20px 40px rgba(255, 215, 0, 0.3),
+                inset 0 -10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .modern-flame {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 60px;
+            filter: url(#glow);
+            animation: modernFlicker 2s ease-in-out infinite alternate;
+        }
+
+        .modern-flame::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at bottom, 
+                #FFFFFF 0%, 
+                #FFD700 20%, 
+                #FFA500 40%, 
+                #FF6B35 60%, 
+                transparent 100%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            filter: blur(2px);
+        }
+
+        .modern-flame::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #FFFFFF, #FFD700);
+            border-radius: 50%;
+            box-shadow: 0 0 40px var(--gold);
+        }
+
+        @keyframes modernFlicker {
+            0%, 100% { 
+                transform: translateX(-50%) scale(1) rotate(-2deg); 
+                filter: brightness(1) url(#glow);
+            }
+            33% { 
+                transform: translateX(-50%) scale(1.1) rotate(1deg); 
+                filter: brightness(1.2) url(#glow);
+            }
+            66% { 
+                transform: translateX(-50%) scale(0.95) rotate(-1deg); 
+                filter: brightness(0.9) url(#glow);
+            }
+        }
+
+        /* Message Section */
+        .message-section {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0f1a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .message-card {
+            background: var(--glass);
+            backdrop-filter: blur(40px) saturate(150%);
+            -webkit-backdrop-filter: blur(40px) saturate(150%);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 4rem;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .message-card.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .message-text {
+            font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+            line-height: 1.8;
+            font-weight: 300;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+        }
+
+        .message-highlight {
+            background: linear-gradient(135deg, var(--gold), var(--orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 500;
+        }
+
+        /* Interactive Buttons */
+        .button-group {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 4rem;
+        }
+
+        .glow-button {
+            padding: 16px 40px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 100px;
+            background: linear-gradient(135deg, var(--gold), var(--orange));
+            color: var(--dark);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .glow-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .glow-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 10px 40px rgba(255, 215, 0, 0.4),
+                0 0 60px rgba(255, 215, 0, 0.2);
+        }
+
+        .glow-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* Rangoli Section */
+        .rangoli-section {
+            background: radial-gradient(circle at center, rgba(139, 92, 246, 0.1) 0%, #000000 50%);
+        }
+
+        .rangoli-container {
+            width: 450px;
+            height: 450px;
+            position: relative;
+            margin: 4rem auto;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .rangoli-container.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Complex Rangoli SVG Container */
+        .rangoli-svg {
+            width: 100%;
+            height: 100%;
+            animation: rotateRangoli 60s linear infinite;
+        }
+
+        /* Individual rangoli elements */
+        .rangoli-center {
+            fill: none;
+            stroke: var(--gold);
+            stroke-width: 2;
+            opacity: 0.9;
+            animation: pulseStroke 3s ease-in-out infinite;
+        }
+
+        .rangoli-petals {
+            fill: none;
+            stroke: var(--orange);
+            stroke-width: 1.5;
+            opacity: 0.8;
+            animation: pulseStroke 3s ease-in-out infinite 0.5s;
+        }
+
+        .rangoli-outer {
+            fill: none;
+            stroke: var(--purple);
+            stroke-width: 1.5;
+            opacity: 0.7;
+            animation: pulseStroke 3s ease-in-out infinite 1s;
+        }
+
+        .rangoli-dots {
+            fill: var(--gold-light);
+            opacity: 0.8;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        .rangoli-decorative {
+            fill: none;
+            stroke: #FF69B4;
+            stroke-width: 1;
+            opacity: 0.6;
+            animation: pulseStroke 3s ease-in-out infinite 1.5s;
+        }
+
+        @keyframes rotateRangoli {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulseStroke {
+            0%, 100% { 
+                opacity: 0.4;
+                stroke-width: 1;
+            }
+            50% { 
+                opacity: 1;
+                stroke-width: 2;
+            }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Responsive Rangoli */
+        @media (max-width: 768px) {
+            .rangoli-container {
+                width: 320px;
+                height: 320px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .rangoli-container {
+                width: 280px;
+                height: 280px;
+            }
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            text-align: center;
+            background: #000000;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-text {
+            font-size: 1rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 0.1em;
+        }
+
+        .footer-text .heart {
+            display: inline-block;
+            color: #FF6B35;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* SVG Filters */
+        svg {
+            position: absolute;
+            width: 0;
+            height: 0;
+        }
+
+        /* Blessing Modal */
+        .blessing-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: var(--glass);
+            backdrop-filter: blur(40px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 3rem;
+            max-width: 500px;
+            text-align: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .blessing-modal.active {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .blessing-text {
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .close-blessing {
+            padding: 12px 30px;
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            border-radius: 100px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .close-blessing:hover {
+            background: var(--gold);
+            color: var(--dark);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: clamp(2.5rem, 12vw, 4rem);
+            }
+            
+            .rangoli-container {
+                width: 320px;
+                height: 320px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .message-card {
+                padding: 2rem;
+            }
+            
+            .modern-diya {
+                width: 100px;
+                height: 50px;
+            }
+            
+            .modern-flame {
+                width: 35px;
+                height: 50px;
+                bottom: 40px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .rangoli-container {
+                width: 280px;
+                height: 280px;
+            }
+            
+            .diya-grid {
+                gap: 2rem;
+            }
+            
+            .modern-diya {
+                width: 90px;
+                height: 45px;
+            }
+        }
+
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.5s;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-text {
+            font-size: 2rem;
+            color: var(--gold);
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Loader -->
+    <div class="loader">
+        <div class="loader-text">DIWALI</div>
+    </div>
+
+    <!-- Canvas Container -->
+    <div id="canvas-container">
+        <canvas id="particles"></canvas>
+        <canvas id="fireworks"></canvas>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="hero-title">Diwali</h1>
+        <p class="hero-subtitle">Festival of Lights</p>
+        <div class="scroll-indicator"></div>
+    </section>
+
+    <!-- Diya Section -->
+    <section class="section diya-section">
+        <div class="container">
+            <h2 class="section-title">Light the Diyas</h2>
+            <div class="diya-grid">
+                <div class="diya-wrapper" onclick="lightDiya(event)">
+                    <div class="modern-diya">
+                        <div class="modern-flame"></div>
+                    </div>
+                </div>
+                <div class="diya-wrapper" onclick="lightDiya(event)">
+                    <div class="modern-diya">
+                        <div class="modern-flame"></div>
+                    </div>
+                </div>
+                <div class="diya-wrapper" onclick="lightDiya(event)">
+                    <div class="modern-diya">
+                        <div class="modern-flame"></div>
+                    </div>
+                </div>
+                <div class="diya-wrapper" onclick="lightDiya(event)">
+                    <div class="modern-diya">
+                        <div class="modern-flame"></div>
+                    </div>
+                </div>
+                <div class="diya-wrapper" onclick="lightDiya(event)">
+                    <div class="modern-diya">
+                        <div class="modern-flame"></div>
+                    </div>
+                </div>
+                <div class="diya-wrapper" onclick="lightDiya(event)">
+                    <div class="modern-diya">
+                        <div class="modern-flame"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Message Section -->
+    <section class="section message-section">
+        <div class="container">
+            <div class="message-card">
+                <p class="message-text">
+                    On this auspicious occasion of <span class="message-highlight">Diwali</span>,
+                    may the divine light illuminate your path and bring
+                    <span class="message-highlight">joy</span>, <span class="message-highlight">prosperity</span>,
+                    and <span class="message-highlight">endless happiness</span> to your life.
+                </p>
+                <p class="message-text">
+                    Let's celebrate the triumph of light over darkness,
+                    and welcome new beginnings with open hearts.
+                </p>
+            </div>
+            <div class="button-group">
+                <button class="glow-button" onclick="launchFireworks()">
+                    Launch Fireworks
+                </button>
+                <button class="glow-button" onclick="showBlessing()">
+                    Receive Blessing
+                </button>
+                <button class="glow-button" onclick="createMagic()">
+                    Create Magic
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rangoli Section -->
+    <section class="section rangoli-section">
+        <div class="container">
+            <h2 class="section-title">Sacred Geometry</h2>
+            <div class="rangoli-container">
+                <svg class="rangoli-svg" viewBox="0 0 450 450" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Central Mandala -->
+                    <g class="rangoli-center">
+                        <!-- Center circle -->
+                        <circle cx="225" cy="225" r="20"/>
+                        <!-- Inner petals -->
+                        <path d="M 225,205 Q 245,225 225,245 Q 205,225 225,205"/>
+                        <path d="M 205,225 Q 225,205 245,225 Q 225,245 205,225"/>
+                        <path d="M 210,210 Q 225,195 240,210 Q 255,225 240,240 Q 225,255 210,240 Q 195,225 210,210"/>
+                    </g>
+                    
+                    <!-- First layer of petals -->
+                    <g class="rangoli-petals">
+                        <!-- 8 petals -->
+                        <ellipse cx="225" cy="175" rx="25" ry="45" transform="rotate(0 225 225)"/>
+                        <ellipse cx="225" cy="175" rx="25" ry="45" transform="rotate(45 225 225)"/>
+                        <ellipse cx="225" cy="175" rx="25" ry="45" transform="rotate(90 225 225)"/>
+                        <ellipse cx="225" cy="175" rx="25" ry="45" transform="rotate(135 225 225)"/>
+                        <ellipse cx="225" cy="175" rx="25" ry="45" transform="rotate(180 225 225)"/>
+                        <ellipse cx="225" cy="175" rx="25" ry="45" transform="rotate(225 225 225)"/>
+                        <ellipse cx="225" cy="175" rx="25" ry="45" transform="rotate(270 225 225)"/>
+                        <ellipse cx="225" cy="175" rx="25" ry="45" transform="rotate(315 225 225)"/>
+                    </g>
+                    
+                    <!-- Second layer - lotus petals -->
+                    <g class="rangoli-outer">
+                        <!-- 12 lotus petals -->
+                        <path d="M 225,120 Q 250,140 225,160 Q 200,140 225,120" transform="rotate(0 225 225)"/>
+                        <path d="M 225,120 Q 250,140 225,160 Q 200,140 225,120" transform="rotate(30 225 225)"/>
+                        <path d="M 225,120 Q 250,140 225,160 Q 200,140 225,120" transform="rotate(60 225 225)"/>
+                        <path d="M 225,120 Q 250,140 225,160 Q 200,140 225,120" transform="rotate(90 225 225)"/>
+                        <path d="M 225,120 Q 250,140 225,160 Q 200,140 225,120" transform="rotate(120 225 225)"/>
+                        <path d="M 225,120 Q 250,140 225,160 Q 200,140 225,120" transform="rotate(150 225 225)"/>
+                        <path d="M 225,120 Q 250,140 225,160 Q 200,140 225,120" transform="rotate(180 225 225)"/>
+                        <path d="M 225,120 Q 250,140 225,160 Q 200,140 225,120" transform="rotate(210 225 225)"/>
+                        <path d="M 225,120 Q 250,140 225,160 Q 200,140 225,120" transform="rotate(240 225 225)"/>
+                        <path d="M 225,120 Q 250,140 225,160 Q 200,140 225,120" transform="rotate(270 225 225)"/>
+                        <path d="M 225,120 Q 250,140 225,160 Q 200,140 225,120" transform="rotate(300 225 225)"/>
+                        <path d="M 225,120 Q 250,140 225,160 Q 200,140 225,120" transform="rotate(330 225 225)"/>
+                    </g>
+                    
+                    <!-- Decorative dots -->
+                    <g class="rangoli-dots">
+                        <!-- Inner ring of dots -->
+                        <circle cx="225" cy="165" r="3" transform="rotate(0 225 225)"/>
+                        <circle cx="225" cy="165" r="3" transform="rotate(30 225 225)"/>
+                        <circle cx="225" cy="165" r="3" transform="rotate(60 225 225)"/>
+                        <circle cx="225" cy="165" r="3" transform="rotate(90 225 225)"/>
+                        <circle cx="225" cy="165" r="3" transform="rotate(120 225 225)"/>
+                        <circle cx="225" cy="165" r="3" transform="rotate(150 225 225)"/>
+                        <circle cx="225" cy="165" r="3" transform="rotate(180 225 225)"/>
+                        <circle cx="225" cy="165" r="3" transform="rotate(210 225 225)"/>
+                        <circle cx="225" cy="165" r="3" transform="rotate(240 225 225)"/>
+                        <circle cx="225" cy="165" r="3" transform="rotate(270 225 225)"/>
+                        <circle cx="225" cy="165" r="3" transform="rotate(300 225 225)"/>
+                        <circle cx="225" cy="165" r="3" transform="rotate(330 225 225)"/>
+                        
+                        <!-- Outer ring of dots -->
+                        <circle cx="225" cy="100" r="4" transform="rotate(0 225 225)"/>
+                        <circle cx="225" cy="100" r="4" transform="rotate(45 225 225)"/>
+                        <circle cx="225" cy="100" r="4" transform="rotate(90 225 225)"/>
+                        <circle cx="225" cy="100" r="4" transform="rotate(135 225 225)"/>
+                        <circle cx="225" cy="100" r="4" transform="rotate(180 225 225)"/>
+                        <circle cx="225" cy="100" r="4" transform="rotate(225 225 225)"/>
+                        <circle cx="225" cy="100" r="4" transform="rotate(270 225 225)"/>
+                        <circle cx="225" cy="100" r="4" transform="rotate(315 225 225)"/>
+                    </g>
+                    
+                    <!-- Outer decorative layer -->
+                    <g class="rangoli-decorative">
+                        <!-- Outer frame -->
+                        <rect x="75" y="75" width="300" height="300" rx="20" fill="none"/>
+                        <!-- Corner decorations -->
+                        <path d="M 75,75 L 95,75 L 75,95" fill="none"/>
+                        <path d="M 375,75 L 355,75 L 375,95" fill="none"/>
+                        <path d="M 375,375 L 355,375 L 375,355" fill="none"/>
+                        <path d="M 75,375 L 95,375 L 75,355" fill="none"/>
+                        
+                        <!-- Diamond patterns -->
+                        <path d="M 225,50 L 240,65 L 225,80 L 210,65 Z" fill="none"/>
+                        <path d="M 225,370 L 240,385 L 225,400 L 210,385 Z" fill="none"/>
+                        <path d="M 50,225 L 65,240 L 80,225 L 65,210 Z" fill="none"/>
+                        <path d="M 370,225 L 385,240 L 400,225 L 385,210 Z" fill="none"/>
+                        
+                        <!-- Swirl patterns -->
+                        <path d="M 120,120 Q 140,100 160,120" fill="none"/>
+                        <path d="M 330,120 Q 310,100 290,120" fill="none"/>
+                        <path d="M 120,330 Q 140,350 160,330" fill="none"/>
+                        <path d="M 330,330 Q 310,350 290,330" fill="none"/>
+                    </g>
+                    
+                    <!-- Additional geometric patterns -->
+                    <g class="rangoli-center" opacity="0.5">
+                        <!-- Hexagon -->
+                        <polygon points="225,140 285,175 285,235 225,270 165,235 165,175" fill="none"/>
+                        <!-- Star -->
+                        <polygon points="225,90 250,180 340,180 265,230 290,320 225,260 160,320 185,230 110,180 200,180" fill="none"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-text">
+            Made with <span class="heart">♥</span> by Ramiz
+        </p>
+    </footer>
+
+    <!-- Blessing Modal -->
+    <div class="blessing-modal" id="blessingModal">
+        <p class="blessing-text" id="blessingText"></p>
+        <button class="close-blessing" onclick="closeBlessing()">Thank You</button>
+    </div>
+
+    <!-- SVG Filters -->
+    <svg>
+        <defs>
+            <filter id="glow">
+                <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
+        </defs>
+    </svg>
+
+    <script>
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX - 10 + 'px';
+            cursor.style.top = e.clientY - 10 + 'px';
+        });
+
+        document.addEventListener('mousedown', () => cursor.classList.add('expand'));
+        document.addEventListener('mouseup', () => cursor.classList.remove('expand'));
+
+        // Loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.querySelector('.loader').classList.add('hidden');
+            }, 1500);
+        });
+
+        // Particles Canvas
+        const particleCanvas = document.getElementById('particles');
+        const pCtx = particleCanvas.getContext('2d');
+        particleCanvas.width = window.innerWidth;
+        particleCanvas.height = window.innerHeight;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * particleCanvas.width;
+                this.y = Math.random() * particleCanvas.height;
+                this.size = Math.random() * 2;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x > particleCanvas.width) this.x = 0;
+                if (this.x < 0) this.x = particleCanvas.width;
+                if (this.y > particleCanvas.height) this.y = 0;
+                if (this.y < 0) this.y = particleCanvas.height;
+            }
+
+            draw() {
+                pCtx.fillStyle = `rgba(255, 215, 0, ${this.opacity})`;
+                pCtx.beginPath();
+                pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                pCtx.fill();
+            }
+        }
+
+        const particles = [];
+        for (let i = 0; i < 100; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            pCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // Fireworks
+        const fireworkCanvas = document.getElementById('fireworks');
+        const fCtx = fireworkCanvas.getContext('2d');
+        fireworkCanvas.width = window.innerWidth;
+        fireworkCanvas.height = window.innerHeight;
+
+        class Firework {
+            constructor(x, targetY, hue) {
+                this.x = x;
+                this.y = fireworkCanvas.height;
+                this.targetY = targetY;
+                this.speed = 15;
+                this.angle = Math.atan2(targetY - this.y, x - x);
+                this.hue = hue || Math.random() * 360;
+                this.trail = [];
+                this.exploded = false;
+                this.particles = [];
+            }
+
+            update() {
+                if (!this.exploded) {
+                    this.trail.push({ x: this.x, y: this.y });
+                    if (this.trail.length > 10) this.trail.shift();
+                    
+                    this.y -= this.speed;
+                    this.speed *= 0.98;
+                    
+                    if (this.y <= this.targetY || this.speed < 1) {
+                        this.explode();
+                    }
+                } else {
+                    this.particles.forEach((particle, index) => {
+                        particle.update();
+                        if (particle.alpha <= 0) {
+                            this.particles.splice(index, 1);
+                        }
+                    });
+                }
+            }
+
+            explode() {
+                this.exploded = true;
+                const particleCount = 60;
+                for (let i = 0; i < particleCount; i++) {
+                    const angle = (Math.PI * 2 / particleCount) * i;
+                    const velocity = Math.random() * 6 + 2;
+                    this.particles.push(new FireworkParticle(
+                        this.x,
+                        this.y,
+                        Math.cos(angle) * velocity,
+                        Math.sin(angle) * velocity,
+                        this.hue + Math.random() * 30 - 15
+                    ));
+                }
+            }
+
+            draw() {
+                if (!this.exploded) {
+                    // Draw trail
+                    fCtx.beginPath();
+                    this.trail.forEach((point, index) => {
+                        fCtx.lineTo(point.x, point.y);
+                    });
+                    fCtx.strokeStyle = `hsla(${this.hue}, 100%, 50%, 0.8)`;
+                    fCtx.lineWidth = 2;
+                    fCtx.stroke();
+                    
+                    // Draw firework
+                    fCtx.beginPath();
+                    fCtx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+                    fCtx.fillStyle = `hsl(${this.hue}, 100%, 50%)`;
+                    fCtx.fill();
+                } else {
+                    this.particles.forEach(particle => particle.draw());
+                }
+            }
+        }
+
+        class FireworkParticle {
+            constructor(x, y, vx, vy, hue) {
+                this.x = x;
+                this.y = y;
+                this.vx = vx;
+                this.vy = vy;
+                this.hue = hue;
+                this.alpha = 1;
+                this.size = Math.random() * 3 + 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += 0.15; // gravity
+                this.vx *= 0.98; // friction
+                this.alpha -= 0.015;
+            }
+
+            draw() {
+                fCtx.save();
+                fCtx.globalAlpha = this.alpha;
+                fCtx.beginPath();
+                fCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                fCtx.fillStyle = `hsl(${this.hue}, 100%, 50%)`;
+                fCtx.fill();
+                fCtx.restore();
+            }
+        }
+
+        const fireworks = [];
+
+        function animateFireworks() {
+            fCtx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            fCtx.fillRect(0, 0, fireworkCanvas.width, fireworkCanvas.height);
+            
+            fireworks.forEach((firework, index) => {
+                firework.update();
+                firework.draw();
+                
+                if (firework.exploded && firework.particles.length === 0) {
+                    fireworks.splice(index, 1);
+                }
+            });
+            
+            requestAnimationFrame(animateFireworks);
+        }
+        animateFireworks();
+
+        function launchFireworks() {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight * 0.5;
+                    fireworks.push(new Firework(x, y));
+                }, i * 200);
+            }
+        }
+
+        // Auto-launch occasional fireworks
+        setInterval(() => {
+            if (Math.random() > 0.8) {
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight * 0.5;
+                fireworks.push(new Firework(x, y));
+            }
+        }, 3000);
+
+        // Click to launch firework
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('button') && !e.target.closest('.diya-wrapper')) {
+                fireworks.push(new Firework(e.clientX, e.clientY));
+            }
+        });
+
+        // Light Diya Effect
+        function lightDiya(event) {
+            const diya = event.currentTarget;
+            
+            // Create sparkles
+            for (let i = 0; i < 10; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.style.position = 'fixed';
+                sparkle.style.left = event.clientX + 'px';
+                sparkle.style.top = event.clientY + 'px';
+                sparkle.style.width = '4px';
+                sparkle.style.height = '4px';
+                sparkle.style.background = '#FFD700';
+                sparkle.style.borderRadius = '50%';
+                sparkle.style.pointerEvents = 'none';
+                sparkle.style.zIndex = '1000';
+                document.body.appendChild(sparkle);
+                
+                const angle = (Math.PI * 2 / 10) * i;
+                const velocity = 5;
+                const vx = Math.cos(angle) * velocity;
+                const vy = Math.sin(angle) * velocity;
+                
+                let x = 0;
+                let y = 0;
+                let opacity = 1;
+                
+                const animate = () => {
+                    x += vx;
+                    y += vy;
+                    opacity -= 0.02;
+                    
+                    sparkle.style.transform = `translate(${x}px, ${y}px)`;
+                    sparkle.style.opacity = opacity;
+                    
+                    if (opacity > 0) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        sparkle.remove();
+                    }
+                };
+                animate();
+            }
+            
+            // Launch small firework
+            fireworks.push(new Firework(event.clientX, event.clientY - 100, 45));
+        }
+
+        // Blessings
+        const blessings = [
+            "May the divine light of Diwali bring peace, prosperity, and happiness to your life ✨",
+            "May Goddess Lakshmi bless you with wealth and wisdom 🪷",
+            "May Lord Ganesha remove all obstacles from your path 🐘",
+            "May this festival of lights brighten your life with joy and success 🪔",
+            "May your life be as colorful and sparkling as the Diwali lights ✨",
+            "May the warmth of Diwali fill your heart with love and compassion 💫",
+            "May this Diwali mark the beginning of new achievements 🌟",
+            "May the festival bring endless moments of joy and laughter 🎆"
+        ];
+
+        function showBlessing() {
+            const modal = document.getElementById('blessingModal');
+            const text = document.getElementById('blessingText');
+            text.textContent = blessings[Math.floor(Math.random() * blessings.length)];
+            modal.classList.add('active');
+            
+            // Auto-launch celebratory fireworks
+            launchFireworks();
+        }
+
+        function closeBlessing() {
+            document.getElementById('blessingModal').classList.remove('active');
+        }
+
+        // Create Magic
+        function createMagic() {
+            // Create golden particles that follow a path
+            const particleCount = 50;
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            
+            for (let i = 0; i < particleCount; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.style.position = 'fixed';
+                    particle.style.width = '6px';
+                    particle.style.height = '6px';
+                    particle.style.background = 'radial-gradient(circle, #FFFFFF, #FFD700)';
+                    particle.style.borderRadius = '50%';
+                    particle.style.pointerEvents = 'none';
+                    particle.style.zIndex = '999';
+                    particle.style.boxShadow = '0 0 10px #FFD700';
+                    document.body.appendChild(particle);
+                    
+                    const angle = (Math.PI * 2 / particleCount) * i;
+                    const radius = 0;
+                    let currentRadius = radius;
+                    let currentAngle = angle;
+                    let opacity = 1;
+                    
+                    const animate = () => {
+                        currentRadius += 3;
+                        currentAngle += 0.1;
+                        opacity -= 0.01;
+                        
+                        const x = centerX + Math.cos(currentAngle) * currentRadius;
+                        const y = centerY + Math.sin(currentAngle) * currentRadius;
+                        
+                        particle.style.left = x + 'px';
+                        particle.style.top = y + 'px';
+                        particle.style.opacity = opacity;
+                        particle.style.transform = `scale(${1 + currentRadius * 0.01})`;
+                        
+                        if (opacity > 0) {
+                            requestAnimationFrame(animate);
+                        } else {
+                            particle.remove();
+                        }
+                    };
+                    animate();
+                }, i * 20);
+            }
+            
+            // Launch multiple fireworks
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight * 0.6;
+                    fireworks.push(new Firework(x, y, 45));
+                }, i * 150);
+            }
+        }
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section-title, .message-card, .rangoli-container').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Window resize
+        window.addEventListener('resize', () => {
+            particleCanvas.width = window.innerWidth;
+            particleCanvas.height = window.innerHeight;
+            fireworkCanvas.width = window.innerWidth;
+            fireworkCanvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
