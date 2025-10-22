@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Travel Map - Cosmic Journey</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #00D4FF;
+            --secondary: #FF00EA;
+            --accent: #FFEA00;
+            --dark: #0A0E27;
+            --glass: rgba(255, 255, 255, 0.03);
+            --neon-glow: 0 0 20px currentColor;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            background: var(--dark);
+            color: #fff;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        /* cosmic background */
+        .cosmos {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at top, #1a1e3a 0%, var(--dark) 50%),
+                radial-gradient(ellipse at bottom, #0c1628 0%, var(--dark) 50%);
+            z-index: -2;
+        }
+        
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 4s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        
+        .shooting-star {
+            position: absolute;
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, white, transparent);
+            animation: shoot 3s linear infinite;
+            opacity: 0;
+        }
+        
+        @keyframes shoot {
+            0% {
+                transform: translateX(-100px) translateY(0) rotate(-45deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(calc(100vw + 100px)) translateY(100vh) rotate(-45deg);
+                opacity: 0;
+            }
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* hero section */
+        header {
+            text-align: center;
+            padding: 4rem 2rem;
+            position: relative;
+        }
+        
+        .glitch-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1 {
+            font-size: 5rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .glitch {
+            position: relative;
+            color: #fff;
+            text-shadow: 
+                0 0 10px var(--primary),
+                0 0 20px var(--primary),
+                0 0 30px var(--primary);
+        }
+        
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+        
+        .glitch::before {
+            animation: glitch-1 0.3s infinite;
+            color: var(--primary);
+            z-index: -1;
+        }
+        
+        .glitch::after {
+            animation: glitch-2 0.3s infinite;
+            color: var(--secondary);
+            z-index: -2;
+        }
+        
+        @keyframes glitch-1 {
+            0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+            20% { clip-path: inset(30% 0 40% 0); transform: translate(-2px, 2px); }
+            40% { clip-path: inset(60% 0 20% 0); transform: translate(2px, -2px); }
+            60% { clip-path: inset(10% 0 80% 0); transform: translate(-2px, 0); }
+            80% { clip-path: inset(50% 0 30% 0); transform: translate(2px, 0); }
+        }
+        
+        @keyframes glitch-2 {
+            0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+            20% { clip-path: inset(60% 0 20% 0); transform: translate(2px, -2px); }
+            40% { clip-path: inset(10% 0 80% 0); transform: translate(-2px, 2px); }
+            60% { clip-path: inset(40% 0 30% 0); transform: translate(2px, 0); }
+            80% { clip-path: inset(20% 0 70% 0); transform: translate(-2px, 0); }
+        }
+        
+        .subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            letter-spacing: 0.2em;
+            text-transform: lowercase;
+            animation: fadeIn 2s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* map with holographic effect */
+        .map-container {
+            position: relative;
+            margin: 3rem 0;
+            padding: 2px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            border-radius: 20px;
+            animation: gradient-rotate 4s linear infinite;
+        }
+        
+        @keyframes gradient-rotate {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+        
+        .map-inner {
+            background: var(--dark);
+            border-radius: 18px;
+            padding: 1rem;
+            position: relative;
+        }
+        
+        #map {
+            width: 100%;
+            height: 600px;
+            border-radius: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* holographic overlay */
+        .holo-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 212, 255, 0.03) 2px,
+                    rgba(0, 212, 255, 0.03) 4px
+                );
+            pointer-events: none;
+            border-radius: 12px;
+            z-index: 2;
+            mix-blend-mode: screen;
+            animation: scan 8s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(20px); }
+        }
+        
+        /* map disclaimer - super subtle */
+        .map-disclaimer {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.15);
+            line-height: 1.3;
+        }
+        
+        /* futuristic stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+        
+        .stat-card {
+            position: relative;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(255, 0, 234, 0.05));
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            animation: rotate 10s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 
+                0 10px 40px rgba(0, 212, 255, 0.3),
+                inset 0 0 20px rgba(0, 212, 255, 0.1);
+        }
+        
+        .stat-card:hover::before {
+            opacity: 0.1;
+        }
+        
+        .stat-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-size: 0.85rem;
+        }
+        
+        .stat-icon {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            opacity: 0.3;
+        }
+        
+        /* city markers - smaller emoji pins */
+        .city-marker {
+            width: 30px; /* Reduced size */
+            height: 30px; /* Reduced size */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px; /* Reduced emoji size */
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            box-shadow: 
+                0 0 15px var(--secondary),
+                0 0 30px rgba(255, 0, 234, 0.8),
+                0 2px 6px rgba(0, 0, 0, 0.5);
+            animation: bounce 2s ease-in-out infinite;
+            z-index: 1000 !important;
+        }
+        
+        .city-marker.favorite {
+            font-size: 25px; /* Reduced emoji size */
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 
+                0 0 20px var(--accent),
+                0 0 40px rgba(255, 234, 0, 1),
+                0 2px 8px rgba(0, 0, 0, 0.5);
+            animation: bounce-favorite 1.5s ease-in-out infinite;
+            z-index: 1001 !important;
+        }
+        
+        .city-marker {
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        .city-marker.favorite {
+            animation: bounce-favorite 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { 
+                transform: translateY(0) scale(1);
+            }
+            50% { 
+                transform: translateY(-8px) scale(1.05); /* Adjusted bounce height */
+            }
+        }
+        
+        @keyframes bounce-favorite {
+            0%, 100% { 
+                transform: translateY(0) scale(1) rotate(0deg);
+            }
+            50% { 
+                transform: translateY(-10px) scale(1.1) rotate(5deg); /* Adjusted bounce height */
+            }
+        }
+        
+        /* popup styles */
+        .leaflet-popup-content-wrapper {
+            background: rgba(10, 14, 39, 0.95);
+            border: 1px solid var(--primary);
+            border-radius: 10px;
+            box-shadow: 
+                0 0 30px rgba(0, 212, 255, 0.5),
+                inset 0 0 20px rgba(0, 212, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .leaflet-popup-tip {
+            background: rgba(10, 14, 39, 0.95);
+            border: 1px solid var(--primary);
+        }
+        
+        /* legend */
+        .legend {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            background: rgba(10, 14, 39, 0.9);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .legend-item:hover {
+            transform: translateX(5px);
+            color: var(--primary);
+        }
+        
+        .legend-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* loading screen */
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+        }
+        
+        .loading-text {
+            font-size: 1.2rem;
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--primary);
+            text-shadow: 0 0 20px currentColor;
+            animation: pulse 1.5s ease infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        .orbital-loader {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            margin: 0 auto;
+        }
+        
+        .orbit {
+            position: absolute;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 50%;
+            animation: rotate 2s linear infinite;
+        }
+        
+        .orbit:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            animation-duration: 3s;
+        }
+        
+        .orbit:nth-child(2) {
+            width: 70px;
+            height: 70px;
+            top: 15px;
+            left: 15px;
+            animation-duration: 2s;
+            animation-direction: reverse;
+        }
+        
+        .orbit:nth-child(3) {
+            width: 40px;
+            height: 40px;
+            top: 30px;
+            left: 30px;
+            animation-duration: 1s;
+        }
+        
+        .planet {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 20px currentColor;
+        }
+        
+        .orbit:nth-child(1) .planet {
+            top: -5px;
+            left: calc(50% - 5px);
+        }
+        
+        .orbit:nth-child(2) .planet {
+            top: -5px;
+            left: calc(50% - 5px);
+            background: var(--secondary);
+        }
+        
+        .orbit:nth-child(3) .planet {
+            top: -5px;
+            left: calc(50% - 5px);
+            background: var(--accent);
+        }
+        
+        /* quote section - simpler version */
+        .quote-section {
+            margin: 6rem 0;
+            position: relative;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(255, 0, 234, 0.02));
+            border-radius: 20px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            overflow: hidden;
+        }
+        
+        .quote-section::before {
+            content: '❝';
+            position: absolute;
+            top: -2rem;
+            left: 2rem;
+            font-size: 8rem;
+            color: var(--primary);
+            opacity: 0.1;
+            font-family: Georgia, serif;
+        }
+        
+        .quote-text {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .quote-author {
+            text-align: right;
+            font-size: 1.1rem;
+            color: var(--primary);
+            text-shadow: 0 0 10px currentColor;
+        }
+        
+        .quote-author a {
+            color: inherit;
+            text-decoration: none;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .quote-author a:hover {
+            color: var(--secondary);
+        }
+        
+        /* responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem; }
+            #map { height: 400px; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .quote-section { padding: 2rem; }
+            .quote-text { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmos"></div>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <header>
+            <div class="glitch-wrapper">
+                <h1 class="glitch" data-text="MY JOURNEY">MY JOURNEY</h1>
+            </div>
+            <p class="subtitle">countries i've visited and places i've loved</p>
+        </header>
+        
+        <div class="map-container">
+            <div class="map-inner">
+                <div id="map"></div>
+                <div class="holo-overlay"></div>
+                <div class="loading" id="loading">
+                    <div class="orbital-loader">
+                        <div class="orbit"><div class="planet"></div></div>
+                        <div class="orbit"><div class="planet"></div></div>
+                        <div class="orbit"><div class="planet"></div></div>
+                    </div>
+                    <div class="loading-text">loading the world hehe...</div>
+                </div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div style="width: 20px; height: 20px; background: linear-gradient(45deg, #00D4FF, #0099CC); margin-right: 10px; border-radius: 4px;"></div>
+                        <span>Visited Countries</span>
+                    </div>
+                    <div class="legend-item">
+                        <div style="width: 20px; height: 20px; background: linear-gradient(45deg, #FFEA00, #FFC700); margin-right: 10px; border-radius: 4px;"></div>
+                        <span>Wishlist for 2026</span>
+                    </div>
+                    <div class="legend-item">
+                        <div style="width: 20px; height: 20px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; box-shadow: 0 0 10px #FF00EA;">📍</div>
+                        <span>Cities/Places</span>
+                    </div>
+                    <div class="legend-item">
+                        <div style="width: 20px; height: 20px; background: rgba(255,255,255,0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; box-shadow: 0 0 15px #FFEA00;">⭐</div>
+                        <span>Favorite Places</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="map-disclaimer">
+            The map of India is as it is provided by Leaflet's underlying GeoJSON data; I am aware that its borders may not be accurate.
+        </p>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-icon">🌍</span>
+                <div class="stat-value" id="countries-count">0</div>
+                <div class="stat-label">countries visited</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">📍</span>
+                <div class="stat-value" id="cities-count">0</div>
+                <div class="stat-label">cities & places</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">✨</span>
+                <div class="stat-value" id="wishlist-count">0</div>
+                <div class="stat-label">wishlist</div>
+            </div>
+        </div>
+
+        <div class="quote-section">
+            <p class="quote-text">"Travel changes you. As you move through this life and this world you change things slightly, you leave marks behind, however small. And in return, life - and travel - leaves marks on you. Most of the time, those marks - on your body or on your heart - are beautiful. Often, though, they hurt."</p>
+            <div class="quote-author">
+                — <a href="https://en.wikipedia.org/wiki/Anthony_Bourdain" target="_blank">Anthony Bourdain</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // create starfield
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 4 + 's';
+                starsContainer.appendChild(star);
+            }
+            
+            // add shooting stars
+            for (let i = 0; i < 3; i++) {
+                const shootingStar = document.createElement('div');
+                shootingStar.className = 'shooting-star';
+                shootingStar.style.top = Math.random() * 50 + '%';
+                shootingStar.style.left = '-100px';
+                shootingStar.style.animationDelay = Math.random() * 10 + 's';
+                starsContainer.appendChild(shootingStar);
+            }
+        }
+        createStars();
+        
+        // animated counter
+        function animateValue(element, start, end, duration) {
+            const range = end - start;
+            const increment = range / (duration / 16);
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= end) {
+                    current = end;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current);
+            }, 16);
+        }
+        
+        // ====================================
+        // MY TRAVEL DATA - Updated with my data
+        // ====================================
+        
+        // countries i've visited (will be filled with color)
+        const visitedCountries = [
+            "India",
+            "Malaysia", 
+            "Philippines", // Note: The GeoJSON uses "Philippines"
+            "Thailand"
+            
+        ];
+        
+        // countries i want to visit (will be filled with different color)
+        const wishlistCountries = [
+            "United States of America", // GeoJSON uses "United States of America"
+            "Japan",
+            "Oman",
+            "Yemen",
+            "Iran",
+            "South Korea",
+            "Botswana", 
+            "Germany", 
+            "United Arab Emirates", // GeoJSON uses "United Arab Emirates"
+            "Mexico", 
+            "Vietnam",
+            "Australia", 
+            "Taiwan"
+        ];
+        
+        /* specific cities/places i want to mark
+        */
+        const places = [
+            // India cities
+            {
+                name: "Kolkata, India",
+                coordinates: [22.5726, 88.3639],
+                favorite: true,
+                description: "My Home City! 🏡"
+            },
+            {
+                name: "Ranchi, India",
+                coordinates: [23.3441, 85.3096],
+                favorite: false,
+                description: "The city of waterfalls."
+            },
+            {
+                name: "Hyderabad, India",
+                coordinates: [17.3850, 78.4867],
+                favorite: false,
+                description: "The City of Pearls and Biryani!"
+            },
+            {
+                name: "Bangalore, India",
+                coordinates: [12.9716, 77.5946],
+                favorite: false,
+                description: "The 'Silicon Valley' of India."
+            },
+            {
+                name: "Jamshedpur, India",
+                coordinates: [22.8046, 86.2029],
+                favorite: false,
+                description: "Steel City of India."
+            },
+        ];
+        
+        // ====================================
+        // MAP SETUP
+        // ====================================
+        
+        // initialize map - FIXED ZOOM TO 2
+        const map = L.map('map', {
+            center: [20, 0],
+            zoom: 2,  // Fixed from 2.5 to 2
+            minZoom: 2,
+            maxZoom: 10,
+            zoomControl: false
+        });
+        
+        // add custom zoom control
+        L.control.zoom({
+            position: 'topright'
+        }).addTo(map);
+        
+        // add dark theme base map
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
+            attribution: '© OpenStreetMap contributors © CARTO'
+        }).addTo(map);
+        
+        // add labels on top
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png', {
+            attribution: '© OpenStreetMap contributors © CARTO',
+            pane: 'shadowPane'
+        }).addTo(map);
+        
+        // load country GeoJSON data
+        fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
+            .then(response => response.json())
+            .then(data => {
+                // hide loading message
+                setTimeout(() => {
+                    const loadingEl = document.getElementById('loading');
+                    loadingEl.style.opacity = '0';
+                    loadingEl.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => {
+                        loadingEl.style.display = 'none';
+                    }, 500);
+                }, 1000);
+                
+                // add country polygons
+                L.geoJSON(data, {
+                    style: function(feature) {
+                        const countryName = feature.properties.name;
+                        
+                        // Check if country is visited
+                        if (visitedCountries.includes(countryName)) {
+                            return {
+                                fillColor: '#00D4FF',
+                                fillOpacity: 0.4,
+                                color: '#00D4FF',
+                                weight: 2,
+                                opacity: 0.8
+                            };
+                        }
+                        // check if country is in wishlist
+                        else if (wishlistCountries.includes(countryName) || (countryName === "United States" && wishlistCountries.includes("United States of America"))) {
+                            return {
+                                fillColor: '#FFEA00',
+                                fillOpacity: 0.3,
+                                color: '#FFEA00',
+                                weight: 2,
+                                opacity: 0.6
+                            };
+                        }
+                        // default style for unvisited countries
+                        else {
+                            return {
+                                fillColor: '#1a1e3a',
+                                fillOpacity: 0.2,
+                                color: '#2a2e4a',
+                                weight: 0.5,
+                                opacity: 0.3
+                            };
+                        }
+                    },
+                    onEachFeature: function(feature, layer) {
+                        const countryName = feature.properties.name;
+                        let popupContent = `<div class="popup-content">
+                            <div style="font-weight: 600; font-size: 18px; margin-bottom: 8px; color: #00D4FF;">${countryName}</div>`;
+                        
+                        if (visitedCountries.includes(countryName)) {
+                            popupContent += `<div style="color: #00D4FF;">✓ Visited</div>`;
+                        } else if (wishlistCountries.includes(countryName) || (countryName === "United States" && wishlistCountries.includes("United States of America"))) {
+                            popupContent += `<div style="color: #FFEA00;">📍 Wishlist 2026</div>`;
+                        }
+                        
+                        popupContent += `</div>`;
+                        layer.bindPopup(popupContent);
+                        
+                        // hover effect
+                        layer.on({
+                            mouseover: function(e) {
+                                const layer = e.target;
+                                if (visitedCountries.includes(countryName) || wishlistCountries.includes(countryName) || (countryName === "United States" && wishlistCountries.includes("United States of America"))) {
+                                    layer.setStyle({
+                                        fillOpacity: 0.6,
+                                        weight: 3
+                                    });
+                                }
+                            },
+                            mouseout: function(e) {
+                                const layer = e.target;
+                                if (visitedCountries.includes(countryName)) {
+                                    layer.setStyle({ fillOpacity: 0.4, weight: 2 });
+                                } else if (wishlistCountries.includes(countryName) || (countryName === "United States" && wishlistCountries.includes("United States of America"))) {
+                                    layer.setStyle({ fillOpacity: 0.3, weight: 2 });
+                                }
+                            }
+                        });
+                    }
+                }).addTo(map);
+                
+                // add city markers on top - AFTER GeoJSON is loaded
+                setTimeout(() => {
+                    places.forEach(place => {
+                        try {
+                            // Try Method 1: Custom icon with reduced size
+                            const icon = L.divIcon({
+                                className: place.favorite ? 'city-marker favorite' : 'city-marker',
+                                html: place.favorite ? '⭐' : '📍',
+                                iconSize: [30, 30], // Reduced size
+                                iconAnchor: [15, 30], // Anchor at bottom center (Half of iconSize[0], iconSize[1])
+                                popupAnchor: [0, -30] // Popup above pin
+                            });
+                            
+                            // Create and add marker
+                            const marker = L.marker(place.coordinates, { 
+                                icon: icon,
+                                zIndexOffset: place.favorite ? 1000 : 500 // Ensure markers are on top
+                            });
+                            
+                            // Add popup
+                            marker.bindPopup(`
+                                <div class="popup-content">
+                                    <div style="font-weight: 600; font-size: 18px; margin-bottom: 8px; color: ${place.favorite ? '#FFEA00' : '#FF00EA'};">
+                                        ${place.name}
+                                    </div>
+                                    <div style="color: rgba(255,255,255,0.8);">${place.description || ''}</div>
+                                    ${place.favorite ? '<div style="color: #FFEA00; margin-top: 8px;">⭐ Favorite Place</div>' : ''}
+                                </div>
+                            `);
+                            
+                            // Add to map
+                            marker.addTo(map);
+                            console.log(`Added marker: ${place.name} at [${place.coordinates}]`);
+                        } catch (error) {
+                            console.error(`Error with custom marker for ${place.name}, trying default:`, error);
+                            // Fallback: Use default Leaflet marker
+                            try {
+                                const defaultMarker = L.marker(place.coordinates)
+                                    .bindPopup(`<b>${place.name}</b><br>${place.description}`)
+                                    .addTo(map);
+                                console.log(`Added default marker: ${place.name}`);
+                            } catch (error2) {
+                                console.error(`Failed to add any marker for ${place.name}:`, error2);
+                            }
+                        }
+                    });
+                    console.log(`Total markers added: ${places.length}`);
+                }, 100); // Small delay to ensure GeoJSON is fully rendered
+                
+                // update statistics with animation
+                setTimeout(() => {
+                    animateValue(document.getElementById('countries-count'), 0, visitedCountries.length, 2000);
+                    animateValue(document.getElementById('cities-count'), 0, places.length, 2000);
+                    animateValue(document.getElementById('wishlist-count'), 0, wishlistCountries.length, 2000);
+                }, 1500);
+            })
+            .catch(error => {
+                console.error('Error loading country data:', error);
+                document.getElementById('loading').innerHTML = '<div class="loading-text">Error loading map data</div>';
+            });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'r' || e.key === 'R') {
+                map.flyTo([20, 0], 2, {
+                    duration: 2,
+                    easeLinearity: 0.5
+                });
+            }
+        });
+    </script>
+</body>
+</html>
