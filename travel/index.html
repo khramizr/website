@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Travel Map - Country Fill</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #0a0a0a;
+            color: #ffffff;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: #888;
+            font-size: 1.1rem;
+        }
+        
+        #map {
+            width: 100%;
+            height: 650px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            background-color: #1a1a1a;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4FC3F7;
+        }
+        
+        .stat-label {
+            color: #888;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.5rem;
+        }
+        
+        /* City markers */
+        .city-marker {
+            background-color: #FF1744;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+            cursor: pointer;
+        }
+        
+        .city-marker.favorite {
+            width: 16px;
+            height: 16px;
+            background-color: #FFD700;
+            box-shadow: 0 0 10px rgba(255,215,0,0.6);
+        }
+        
+        /* popup styles */
+        .leaflet-popup-content-wrapper {
+            background: #1a1a1a;
+            color: #fff;
+            border-radius: 8px;
+        }
+        
+        .leaflet-popup-tip {
+            background: #1a1a1a;
+        }
+        
+        .leaflet-popup-close-button {
+            color: #fff !important;
+        }
+        
+        .popup-content {
+            padding: 0.5rem;
+        }
+        
+        .popup-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 0.3rem;
+        }
+        
+        .popup-subtitle {
+            color: #888;
+            font-size: 12px;
+        }
+        
+        .legend {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(26, 26, 26, 0.95);
+            padding: 1rem;
+            border-radius: 8px;
+            z-index: 1000;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 0.5rem;
+            border: 1px solid #fff;
+            border-radius: 3px;
+        }
+        
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            background: #1a1a1a;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+        }
+        
+        /* New Styles for Quote and Disclaimer */
+        .quote-box {
+            margin-top: 3rem;
+            padding: 2rem;
+            border-left: 4px solid #4FC3F7;
+            background-color: #1a1a1a;
+            border-radius: 4px;
+        }
+
+        .quote-text {
+            font-style: italic;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+            color: #ccc;
+        }
+
+        .quote-author {
+            display: block;
+            text-align: right;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #4FC3F7;
+        }
+
+        .disclaimer {
+            margin-top: 0.5rem;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #555;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            #map { height: 450px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌍 My Travel Map</h1>
+            <p class="subtitle">countries i've visited and places i've loved</p>
+        </header>
+        
+        <div style="position: relative;">
+            <div id="map"></div>
+            <div class="loading" id="loading">loading the world hehe...</div>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #4FC3F7; opacity: 0.6;"></div>
+                    <span>Visited Countries</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #FFC107; opacity: 0.6;"></div>
+                    <span>Wishlist Countries for 2026</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #FF1744; width: 12px; height: 12px; border-radius: 50%;"></div>
+                    <span>Cities/Places</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #FFD700; width: 12px; height: 12px; border-radius: 50%;"></div>
+                    <span>Favorite Places</span>
+                </div>
+            </div>
+        </div>
+
+        <p class="disclaimer">The map of India is as it is provided by Leaflet's underlying GeoJSON data; I am aware that its borders may not be accurate.</p>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="countries-count">0</div>
+                <div class="stat-label">countries visited</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="cities-count">0</div>
+                <div class="stat-label">cities & places</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="wishlist-count">0</div>
+                <div class="stat-label">wishlist</div>
+            </div>
+        </div>
+
+        <div class="quote-box">
+            <p class="quote-text">“Travel changes you. As you move through this life and this world you change things slightly, you leave marks behind, however small. And in return, life - and travel - leaves marks on you. Most of the time, those marks - on your body or on your heart - are beautiful. Often, though, they hurt.”</p>
+            <span class="quote-author">— <a href="https://en.wikipedia.org/wiki/Anthony_Bourdain" target="_blank" style="color: inherit; text-decoration: none;">Anthony Bourdain</a></span>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // ====================================
+        // MY TRAVEL DATA - Updated with my data
+        // ====================================
+        
+        // countries i've visited (will be filled with color)
+        const visitedCountries = [
+            "India",
+            "Malaysia", 
+            "Philippines", // Note: The GeoJSON uses "Philippines"
+            "Thailand"
+            
+        ];
+        
+        // countries i want to visit (will be filled with different color)
+        const wishlistCountries = [
+            "United States of America", // GeoJSON uses "United States of America"
+            "Japan",
+            "Oman",
+            // Socotra is an island and may not be color-filled, but "Yemen" is included for the country-level
+            "Yemen",
+            "Iran",
+            "South Korea",
+            "Botswana", 
+            "Germany", 
+            "United Arab Emirates", // GeoJSON uses "United Arab Emirates"
+            "Mexico", 
+            "Vietnam",
+            "Australia", 
+            "Taiwan" // Note: GeoJSON may use "Taiwan, Province of China" or another variant. Using "Taiwan" for best effort.
+        ];
+        
+        /* specific cities/places i want to mark
+
+        */
+        const places = [
+            {
+                name: "Kolkata, India",
+                coordinates: [22.5726, 88.3639],
+                favorite: true,
+                description: "My Home City! 🏡"
+            },
+            {
+                name: "Hyderabad, India",
+                coordinates: [17.3850, 78.4867],
+                favorite: false,
+                description: "A major tech hub."
+            },
+            {
+                name: "Bangalore, India",
+                coordinates: [12.9716, 77.5946],
+                favorite: false,
+                description: "The 'Silicon Valley' of India."
+            },
+            {
+                name: "Ranchi, India",
+                coordinates: [23.3441, 85.3096],
+                favorite: false,
+                description: "The city of waterfalls."
+            }
+        ];
+        
+        // ====================================
+        // MAP SETUP
+        // ====================================
+        
+        // initialize map
+        const map = L.map('map', {
+            center: [20, 0],
+            zoom: 2.5,
+            minZoom: 2,
+            maxZoom: 10
+        });
+        
+        // add dark theme base map
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
+            attribution: '© OpenStreetMap contributors © CARTO'
+        }).addTo(map);
+        
+        // add labels on top
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png', {
+            attribution: '© OpenStreetMap contributors © CARTO',
+            pane: 'shadowPane'
+        }).addTo(map);
+        
+        // load country GeoJSON data
+        fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
+            .then(response => response.json())
+            .then(data => {
+                // hide loading message
+                document.getElementById('loading').style.display = 'none';
+                
+                // add country polygons
+                L.geoJSON(data, {
+                    style: function(feature) {
+                        const countryName = feature.properties.name;
+                        
+                        // Check if country is visited
+                        if (visitedCountries.includes(countryName)) {
+                            return {
+                                fillColor: '#4FC3F7',
+                                fillOpacity: 0.6,
+                                color: '#4FC3F7',
+                                weight: 1,
+                                opacity: 0.8
+                            };
+                        }
+                        // check if country is in wishlist
+                        else if (wishlistCountries.includes(countryName) || (countryName === "United States" && wishlistCountries.includes("United States of America"))) {
+                            // Added specific handling for common GeoJSON name discrepancies
+                            return {
+                                fillColor: '#FFC107',
+                                fillOpacity: 0.5,
+                                color: '#FFC107',
+                                weight: 1,
+                                opacity: 0.7
+                            };
+                        }
+                        // default style for unvisited countries
+                        else {
+                            return {
+                                fillColor: '#333',
+                                fillOpacity: 0.1,
+                                color: '#555',
+                                weight: 0.5,
+                                opacity: 0.3
+                            };
+                        }
+                    },
+                    onEachFeature: function(feature, layer) {
+                        const countryName = feature.properties.name;
+                        let popupContent = `<div class="popup-content">
+                            <div class="popup-title">${countryName}</div>`;
+                        
+                        if (visitedCountries.includes(countryName)) {
+                            popupContent += `<div class="popup-subtitle">✓ Visited</div>`;
+                        } else if (wishlistCountries.includes(countryName) || (countryName === "United States" && wishlistCountries.includes("United States of America"))) {
+                            popupContent += `<div class="popup-subtitle">📍 On wishlist</div>`;
+                        }
+                        
+                        popupContent += `</div>`;
+                        layer.bindPopup(popupContent);
+                        
+                        // hover effect
+                        layer.on({
+                            mouseover: function(e) {
+                                const layer = e.target;
+                                if (visitedCountries.includes(countryName) || wishlistCountries.includes(countryName) || (countryName === "United States" && wishlistCountries.includes("United States of America"))) {
+                                    layer.setStyle({
+                                        fillOpacity: 0.8
+                                    });
+                                }
+                            },
+                            mouseout: function(e) {
+                                const layer = e.target;
+                                if (visitedCountries.includes(countryName)) {
+                                    layer.setStyle({ fillOpacity: 0.6 });
+                                } else if (wishlistCountries.includes(countryName) || (countryName === "United States" && wishlistCountries.includes("United States of America"))) {
+                                    layer.setStyle({ fillOpacity: 0.5 });
+                                }
+                            }
+                        });
+                    }
+                }).addTo(map);
+                
+                // add city markers on top
+                places.forEach(place => {
+                    const icon = L.divIcon({
+                        className: place.favorite ? 'city-marker favorite' : 'city-marker',
+                        iconSize: place.favorite ? [16, 16] : [12, 12],
+                        popupAnchor: [0, -8]
+                    });
+                    
+                    L.marker(place.coordinates, { icon })
+                        .bindPopup(`
+                            <div class="popup-content">
+                                <div class="popup-title">${place.name}</div>
+                                <div class="popup-subtitle">${place.description || ''}</div>
+                                ${place.favorite ? '<div class="popup-subtitle">⭐ Favorite</div>' : ''}
+                            </div>
+                        `)
+                        .addTo(map);
+                });
+                
+                // update statistics
+                document.getElementById('countries-count').textContent = visitedCountries.length;
+                document.getElementById('cities-count').textContent = places.length;
+                document.getElementById('wishlist-count').textContent = wishlistCountries.length;
+            })
+            .catch(error => {
+                console.error('Error loading country data:', error);
+                document.getElementById('loading').textContent = 'Error loading country data';
+            });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'r' || e.key === 'R') {
+                map.setView([20, 0], 2.5, { animate: true });
+            }
+        });
+    </script>
+</body>
+</html>
