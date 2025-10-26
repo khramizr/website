@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Max vs Oscar - Championship Manifestation</title>
+    <title>F1 2025 - Championship Manifestation</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -15,11 +15,11 @@
         }
         
         :root {
-            --primary-red: #E30118;
-            --primary-orange: #FF8700;
+            --lando-orange: #FF8700;
+            --oscar-orange: #FF6B00;
+            --max-red: #E30118;
             --accent-green: #00ff88;
             --bg-dark: #000000;
-            --bg-card: rgba(255, 255, 255, 0.03);
             --glass-bg: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.1);
             --text-primary: #ffffff;
@@ -58,7 +58,6 @@
             66% { transform: translate(-5%, 5%) rotate(240deg); }
         }
         
-        /* Smooth scroll */
         html {
             scroll-behavior: smooth;
         }
@@ -98,7 +97,7 @@
             font-size: clamp(2.5rem, 5vw, 4.5rem);
             font-weight: 800;
             letter-spacing: -0.03em;
-            background: linear-gradient(135deg, #ffffff 0%, var(--accent-green) 50%, var(--primary-orange) 100%);
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-green) 50%, var(--lando-orange) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -120,7 +119,7 @@
             letter-spacing: 0.01em;
         }
         
-        /* Glass Card Effect - Apple Style */
+        /* Glass Card Effect */
         .glass-card {
             background: var(--glass-bg);
             backdrop-filter: blur(40px) saturate(180%);
@@ -193,7 +192,7 @@
             100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
         
-        /* Stats Grid - Apple Card Style */
+        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -225,16 +224,16 @@
             transition: opacity 0.4s;
         }
         
-        .stat-card.max {
-            color: var(--primary-red);
+        .stat-card.lando {
+            color: var(--lando-orange);
         }
         
         .stat-card.oscar {
-            color: var(--primary-orange);
+            color: var(--oscar-orange);
         }
         
-        .stat-card.gap {
-            color: var(--accent-green);
+        .stat-card.max {
+            color: var(--max-red);
         }
         
         .stat-card:hover {
@@ -271,6 +270,31 @@
             font-weight: 400;
         }
         
+        .position-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 700;
+            margin-top: 8px;
+            letter-spacing: 0.05em;
+        }
+        
+        .position-badge.p1 {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #000;
+        }
+        
+        .position-badge.p2 {
+            background: linear-gradient(135deg, #C0C0C0, #808080);
+            color: #000;
+        }
+        
+        .position-badge.p3 {
+            background: linear-gradient(135deg, #CD7F32, #8B4513);
+            color: #fff;
+        }
+        
         /* Chart Section */
         .chart-section {
             margin-bottom: 60px;
@@ -278,7 +302,7 @@
         
         .chart-wrapper {
             position: relative;
-            height: 700px;
+            height: 750px;
             background: var(--glass-bg);
             backdrop-filter: blur(40px);
             border: 1px solid var(--glass-border);
@@ -292,7 +316,7 @@
             box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
         }
         
-        /* Legend - Clean Apple Style */
+        /* Legend */
         .legend-custom {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -332,7 +356,7 @@
             color: var(--text-primary);
         }
         
-        /* Info Box - Mystical Glass Card */
+        /* Info Box */
         .info-box {
             background: var(--glass-bg);
             backdrop-filter: blur(40px);
@@ -361,7 +385,7 @@
             font-size: 1.5em;
             font-weight: 700;
             margin-bottom: 24px;
-            background: linear-gradient(135deg, var(--primary-orange), var(--accent-green));
+            background: linear-gradient(135deg, var(--lando-orange), var(--accent-green));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -415,8 +439,81 @@
             font-weight: 600;
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
         }
+
+        /* Scenario Cards */
+        .scenarios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .scenario-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(40px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 28px;
+            transition: all 0.3s;
+        }
+
+        .scenario-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .scenario-card h4 {
+            font-size: 1.2em;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .scenario-desc {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+
+        .scenario-card.current-trend h4 { color: #00ff00; }
+        .scenario-card.optimistic h4 { color: #00d4ff; }
+        .scenario-card.conservative h4 { color: #ffaa00; }
+        .scenario-card.best-case h4 { color: #ff00ff; }
+        .scenario-card.mixed h4 { color: #ff4444; }
+
+        .scenario-result {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95em;
+        }
+
+        .scenario-result:last-child {
+            border-bottom: none;
+        }
+
+        .driver-name {
+            font-weight: 600;
+        }
+
+        .driver-name.lando { color: var(--lando-orange); }
+        .driver-name.oscar { color: var(--oscar-orange); }
+        .driver-name.max { color: var(--max-red); }
+
+        .likelihood {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 700;
+            margin-top: 12px;
+            background: rgba(255, 255, 255, 0.1);
+        }
         
-        /* Footer - Apple Style */
+        /* Footer */
         footer {
             margin-top: 100px;
             padding: 60px 40px 40px;
@@ -451,7 +548,7 @@
             left: 50%;
             width: 0;
             height: 2px;
-            background: linear-gradient(90deg, var(--primary-red), var(--accent-green));
+            background: linear-gradient(90deg, var(--max-red), var(--accent-green));
             transition: all 0.3s;
             transform: translateX(-50%);
         }
@@ -485,7 +582,7 @@
                 padding: 20px;
             }
             
-            .legend-custom {
+            .legend-custom, .scenarios-grid {
                 grid-template-columns: 1fr;
             }
             
@@ -495,7 +592,7 @@
             }
         }
         
-        /* Smooth Entrance Animations (Keeping for other elements, but removed for chart-wrapper) */
+        /* Entrance Animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -519,14 +616,11 @@
             animation: fadeInUp 0.8s ease-out 0.4s backwards;
         }
         
-        /* The chart-wrapper animation is removed here to ensure instant visibility */
-        /*
         .chart-wrapper {
             animation: fadeInUp 0.8s ease-out 0.6s backwards;
         }
-        */
         
-        /* Manifestation Pulse Effect */
+        /* Manifestation Pulse */
         @keyframes manifestPulse {
             0%, 100% {
                 box-shadow: 0 0 20px rgba(0, 255, 136, 0.2),
@@ -538,7 +632,7 @@
             }
         }
         
-        .stat-card.gap {
+        .stat-card.lando {
             animation: manifestPulse 3s ease-in-out infinite;
         }
     </style>
@@ -547,28 +641,31 @@
     <div class="container">
         <div class="hero">
             <h1>Championship Manifestation</h1>
-            <p class="subtitle">Max Verstappen's Destiny vs Oscar Piastri</p>
+            <p class="subtitle">The Battle for F1 Glory: Norris • Piastri • Verstappen</p>
         </div>
         
         <div class="update-banner">
-            ✅ AUSTIN RESULTS: Max wins Sprint (Oscar DNF) + Max wins Race (Oscar P5) → Gap reduced from 63 to 40 points!
+            🏆 MEXICO GP UPDATE: Lando takes the lead! 357-356-321 • The championship fight intensifies!
         </div>
 
         <div class="stats-grid">
-            <div class="stat-card glass-card max">
-                <div class="stat-header">Max Verstappen</div>
-                <div class="stat-value">306</div>
-                <div class="stat-label">Sprint: P1 (8pts) | Race: P1 (25pts)</div>
-            </div>
-            <div class="stat-card glass-card gap">
-                <div class="stat-header">Energy Gap</div>
-                <div class="stat-value">40</div>
-                <div class="stat-label">Oscar still leads | Down from 63</div>
+            <div class="stat-card glass-card lando">
+                <div class="stat-header">Lando Norris</div>
+                <div class="stat-value">357</div>
+                <div class="stat-label">Mexico: P1 (25pts)</div>
+                <span class="position-badge p1">P1 - LEADER</span>
             </div>
             <div class="stat-card glass-card oscar">
                 <div class="stat-header">Oscar Piastri</div>
-                <div class="stat-value">346</div>
-                <div class="stat-label">Sprint: DNF (0pts) | Race: P5 (10pts)</div>
+                <div class="stat-value">356</div>
+                <div class="stat-label">Mexico: P5 (10pts)</div>
+                <span class="position-badge p2">P2 - 1 PT BEHIND</span>
+            </div>
+            <div class="stat-card glass-card max">
+                <div class="stat-header">Max Verstappen</div>
+                <div class="stat-value">321</div>
+                <div class="stat-label">Mexico: P3 (15pts)</div>
+                <span class="position-badge p3">P3 - 36 PTS BEHIND</span>
             </div>
         </div>
         
@@ -580,24 +677,32 @@
 
         <div class="legend-custom">
             <div class="legend-item">
-                <div class="legend-color" style="background: #fff;"></div>
-                <div class="legend-text">⚪ Historical Data (Actual)</div>
+                <div class="legend-color" style="background: #FF8700;"></div>
+                <div class="legend-text">🟠 Lando Norris (Actual)</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #FF6B00;"></div>
+                <div class="legend-text">🟠 Oscar Piastri (Actual)</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #E30118;"></div>
+                <div class="legend-text">🔴 Max Verstappen (Actual)</div>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #00ff00;"></div>
-                <div class="legend-text">🟢 Current Trend (13.5 pts/race)</div>
+                <div class="legend-text">🟢 Current Trend</div>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #00d4ff;"></div>
-                <div class="legend-text">🔵 Optimistic (16 pts/race)</div>
+                <div class="legend-text">🔵 Optimistic</div>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #ffaa00;"></div>
-                <div class="legend-text">🟠 Conservative (10 pts/race)</div>
+                <div class="legend-text">🟠 Conservative</div>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #ff00ff;"></div>
-                <div class="legend-text">🟣 Best Case (Max dominance)</div>
+                <div class="legend-text">🟣 Best Case</div>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #ff4444;"></div>
@@ -605,20 +710,112 @@
             </div>
         </div>
 
+        <div class="scenarios-grid">
+            <div class="scenario-card glass-card current-trend">
+                <h4>🟢 Current Trend</h4>
+                <p class="scenario-desc">Based on last 4 races (L: +11.25, O: +5, M: +12 per event)</p>
+                <div class="scenario-result">
+                    <span class="driver-name lando">Lando Norris</span>
+                    <span style="color: #FFD700;">🥇 424 pts</span>
+                </div>
+                <div class="scenario-result">
+                    <span class="driver-name oscar">Oscar Piastri</span>
+                    <span style="color: #CD7F32;">🥉 386 pts</span>
+                </div>
+                <div class="scenario-result">
+                    <span class="driver-name max">Max Verstappen</span>
+                    <span style="color: #C0C0C0;">🥈 393 pts</span>
+                </div>
+                <span class="likelihood">📊 70% LIKELY</span>
+            </div>
+
+            <div class="scenario-card glass-card optimistic">
+                <h4>🔵 Optimistic</h4>
+                <p class="scenario-desc">Lando dominates - 3 wins + 1 sprint win</p>
+                <div class="scenario-result">
+                    <span class="driver-name lando">Lando Norris</span>
+                    <span style="color: #FFD700;">🥇 447 pts</span>
+                </div>
+                <div class="scenario-result">
+                    <span class="driver-name oscar">Oscar Piastri</span>
+                    <span style="color: #C0C0C0;">🥈 411 pts</span>
+                </div>
+                <div class="scenario-result">
+                    <span class="driver-name max">Max Verstappen</span>
+                    <span style="color: #CD7F32;">🥉 381 pts</span>
+                </div>
+                <span class="likelihood">📊 15% LIKELY</span>
+            </div>
+
+            <div class="scenario-card glass-card conservative">
+                <h4>🟠 Conservative</h4>
+                <p class="scenario-desc">Oscar comeback - rediscovers early season form</p>
+                <div class="scenario-result">
+                    <span class="driver-name oscar">Oscar Piastri</span>
+                    <span style="color: #FFD700;">🥇 426 pts</span>
+                </div>
+                <div class="scenario-result">
+                    <span class="driver-name lando">Lando Norris</span>
+                    <span style="color: #C0C0C0;">🥈 422 pts</span>
+                </div>
+                <div class="scenario-result">
+                    <span class="driver-name max">Max Verstappen</span>
+                    <span style="color: #CD7F32;">🥉 386 pts</span>
+                </div>
+                <span class="likelihood">📊 10% LIKELY</span>
+            </div>
+
+            <div class="scenario-card glass-card best-case">
+                <h4>🟣 Best Case - MAX MIRACLE</h4>
+                <p class="scenario-desc">🔥 Max wins ALL 6 remaining events + Lando has 1 DNF + bad luck</p>
+                <div class="scenario-result">
+                    <span class="driver-name max">Max Verstappen</span>
+                    <span style="color: #FFD700;">🥇 437 pts</span>
+                </div>
+                <div class="scenario-result">
+                    <span class="driver-name lando">Lando Norris</span>
+                    <span style="color: #C0C0C0;">🥈 407 pts</span>
+                </div>
+                <div class="scenario-result">
+                    <span class="driver-name oscar">Oscar Piastri</span>
+                    <span style="color: #CD7F32;">🥉 391 pts</span>
+                </div>
+                <span class="likelihood" style="background: rgba(227, 1, 24, 0.2);">⚡ 3% MIRACLE</span>
+            </div>
+
+            <div class="scenario-card glass-card mixed">
+                <h4>🔴 Mixed Realistic</h4>
+                <p class="scenario-desc">Three-way battle - different winners each race</p>
+                <div class="scenario-result">
+                    <span class="driver-name lando">Lando Norris</span>
+                    <span style="color: #FFD700;">🥇 422 pts</span>
+                </div>
+                <div class="scenario-result">
+                    <span class="driver-name oscar">Oscar Piastri</span>
+                    <span style="color: #C0C0C0;">🥈 416 pts</span>
+                </div>
+                <div class="scenario-result">
+                    <span class="driver-name max">Max Verstappen</span>
+                    <span style="color: #CD7F32;">🥉 389 pts</span>
+                </div>
+                <span class="likelihood">📊 2% CHAOS</span>
+            </div>
+        </div>
+
         <div class="info-box glass-card">
-            <h3>✨ Championship Mathematics - Manifesting Victory</h3>
+            <h3>✨ Championship Analysis - Post Mexico GP</h3>
             <ul>
-                <li><strong>Current Standings:</strong> Oscar 346 pts | Max 306 pts</li>
-                <li><strong>Starting Gap (Singapore):</strong> 63 points</li>
-                <li><strong>Austin Sprint:</strong> Max P1 (8pts), Oscar DNF (0pts) → Max gains +8 → Gap: 55 points</li>
-                <li><strong>Austin GP:</strong> Max P1 (25pts), Oscar P5 (10pts) → Max gains +15 → Gap: 40 points</li>
-                <li><strong>Total Gained at Austin:</strong> 23 points in one weekend!</li>
-                <li><strong>Current Championship Gap:</strong> 40 points (Oscar leads)</li>
-                <li><strong>Remaining Points Available:</strong> 141 total (125 from 5 GPs + 16 from 2 Sprints)</li>
-                <li><strong>Sprint Races Remaining:</strong> <span class="sprint-indicator">★ Brazil (Nov 7-9), Qatar (Nov 28-30)</span></li>
-                <li><strong>Regular GPs Remaining:</strong> Mexico, Brazil, Las Vegas, Qatar, Abu Dhabi</li>
-                <li><strong>Max's Recent Average:</strong> 13.5 points gained per race/sprint event</li>
-                <li><strong>Races Needed:</strong> ~3 more races at current pace to take the lead!</li>
+                <li><strong>Current Leader:</strong> Lando Norris - 357 points 🥇</li>
+                <li><strong>The Math:</strong> Lando leads Oscar by 1 pt | Oscar 35 pts ahead of Max</li>
+                <li><strong>Max's Zandvoort Comeback:</strong> Closed 69 points gap (104→35) in 7 races! 🔥</li>
+                <li><strong>Recent Form (Last 4):</strong> Max +12/race | Lando +11.25/race | Oscar +5/race</li>
+                <li><strong>Overall Form (From Zandvoort):</strong> Max +16.6/race | Lando +11.7/race | Oscar +6.7/race</li>
+                <li><strong>The MIRACLE Scenario:</strong> Max can WIN if he takes all 6 remaining events (437 pts) + Lando struggles</li>
+                <li><strong>Reality Check:</strong> Even if Max wins all 6, Lando with all P2s = 443 pts (still wins!)</li>
+                <li><strong>Remaining Points:</strong> 116 total (100 from 4 GPs + 16 from 2 Sprints)</li>
+                <li><strong>Sprint Races:</strong> <span class="sprint-indicator">★ Brazil (Nov 7-9), Qatar (Nov 28-30)</span></li>
+                <li><strong>Regular GPs:</strong> Brazil, Las Vegas, Qatar, Abu Dhabi</li>
+                <li><strong>Championship Status:</strong> All three mathematically alive! But Lando's to lose.</li>
             </ul>
         </div>
     </div>
@@ -639,13 +836,35 @@
             'Qatar Sprint', 'Qatar GP', 'Abu Dhabi'
         ];
 
-        const historical = [104, 94, 69, 63, 55, 40];
-        
-        const currentTrend = [40, 37, 27, 25, 15, 12, 2, -8];
-        const optimistic = [40, 24, 20, 4, -12, -16, -32, -48];
-        const conservative = [40, 30, 28, 18, 8, 6, -4, -14];
-        const bestCase = [40, 20, 17, -3, -23, -26, -46, -66];
-        const mixedRealistic = [40, 33, 31, 16, 6, 4, -4, 2];
+        // Historical data (actual results from Zandvoort to Mexico)
+        const landoHistorical = [275, 293, 299, 312, 314, 332, 357];
+        const oscarHistorical = [309, 324, 324, 336, 336, 346, 356];
+        const maxHistorical = [205, 230, 255, 273, 281, 306, 321];
+
+        // SCENARIO 1: Current Trend (Last 4 races avg: L+11.25, O+5, M+12)
+        const landoTrend = [357, 362, 379, 394, 399, 414, 424];
+        const oscarTrend = [356, 358, 371, 378, 380, 383, 386];
+        const maxTrend = [321, 329, 341, 353, 361, 373, 393];
+
+        // SCENARIO 2: Optimistic (Lando dominates)
+        const landoOpt = [357, 365, 390, 408, 416, 441, 447];
+        const oscarOpt = [356, 362, 380, 395, 400, 413, 411];
+        const maxOpt = [321, 326, 341, 353, 358, 373, 381];
+
+        // SCENARIO 3: Conservative (Oscar comeback)
+        const landoCons = [357, 362, 377, 395, 400, 415, 422];
+        const oscarCons = [356, 362, 380, 395, 401, 419, 426];
+        const maxCons = [321, 329, 344, 356, 364, 379, 386];
+
+        // SCENARIO 4: MAX ABSOLUTE DOMINANCE - Wins ALL 6 events!
+        const landoBest = [357, 357, 372, 384, 391, 399, 407]; // 1 DNF + struggles
+        const oscarBest = [356, 358, 368, 378, 383, 388, 391]; // Continues poor form + 1 DNF
+        const maxBest = [321, 329, 354, 379, 387, 412, 437]; // WINS EVERYTHING! 🔥
+
+        // SCENARIO 5: Mixed Realistic (Chaos - different winners)
+        const landoMixed = [357, 364, 389, 404, 411, 426, 422];
+        const oscarMixed = [356, 361, 379, 394, 399, 414, 416];
+        const maxMixed = [321, 329, 344, 369, 377, 389, 389];
 
         const ctx = document.getElementById('championshipChart').getContext('2d');
         
@@ -654,80 +873,198 @@
             data: {
                 labels: races,
                 datasets: [
+                    // HISTORICAL (ACTUAL) - Thick lines
                     {
-                        label: 'Historical (Actual)',
-                        data: [104, 94, 69, 63, 55, 40, null, null, null, null, null, null, null],
-                        borderColor: '#ffffff',
-                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                        borderWidth: 4,
-                        pointRadius: 7,
-                        pointHoverRadius: 9,
-                        pointBackgroundColor: '#ffffff',
-                        pointBorderColor: '#E30118',
+                        label: 'Lando Norris (Actual)',
+                        data: [...landoHistorical, null, null, null, null, null, null],
+                        borderColor: '#FF8700',
+                        backgroundColor: 'rgba(255, 135, 0, 0.1)',
+                        borderWidth: 5,
+                        pointRadius: 8,
+                        pointHoverRadius: 10,
+                        pointBackgroundColor: '#FF8700',
+                        pointBorderColor: '#fff',
                         pointBorderWidth: 3,
                         tension: 0.4,
                         fill: false
                     },
                     {
-                        label: 'Current Trend',
-                        data: [null, null, null, null, null, ...currentTrend],
-                        borderColor: '#00ff88',
-                        backgroundColor: 'rgba(0, 255, 136, 0.1)',
-                        borderWidth: 3,
-                        pointRadius: 5,
-                        pointHoverRadius: 7,
-                        pointStyle: 'circle',
+                        label: 'Oscar Piastri (Actual)',
+                        data: [...oscarHistorical, null, null, null, null, null, null],
+                        borderColor: '#FF6B00',
+                        backgroundColor: 'rgba(255, 107, 0, 0.1)',
+                        borderWidth: 5,
+                        pointRadius: 8,
+                        pointHoverRadius: 10,
+                        pointBackgroundColor: '#FF6B00',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 3,
                         tension: 0.4,
-                        borderDash: [8, 4],
-                        fill: true
+                        fill: false
                     },
                     {
-                        label: 'Optimistic',
-                        data: [null, null, null, null, null, ...optimistic],
-                        borderColor: '#00d4ff',
-                        backgroundColor: 'rgba(0, 212, 255, 0.08)',
-                        borderWidth: 2.5,
+                        label: 'Max Verstappen (Actual)',
+                        data: [...maxHistorical, null, null, null, null, null, null],
+                        borderColor: '#E30118',
+                        backgroundColor: 'rgba(227, 1, 24, 0.1)',
+                        borderWidth: 5,
+                        pointRadius: 8,
+                        pointHoverRadius: 10,
+                        pointBackgroundColor: '#E30118',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 3,
+                        tension: 0.4,
+                        fill: false
+                    },
+                    // SCENARIO 1: Current Trend (Green)
+                    {
+                        label: 'Lando - Current Trend',
+                        data: [null, null, null, null, null, null, ...landoTrend],
+                        borderColor: '#00ff00',
+                        borderWidth: 3,
                         pointRadius: 4,
-                        pointHoverRadius: 6,
-                        pointStyle: 'triangle',
+                        tension: 0.4,
+                        borderDash: [8, 4]
+                    },
+                    {
+                        label: 'Oscar - Current Trend',
+                        data: [null, null, null, null, null, null, ...oscarTrend],
+                        borderColor: '#00ff00',
+                        borderWidth: 2.5,
+                        pointRadius: 3,
+                        tension: 0.4,
+                        borderDash: [8, 4],
+                        opacity: 0.8
+                    },
+                    {
+                        label: 'Max - Current Trend',
+                        data: [null, null, null, null, null, null, ...maxTrend],
+                        borderColor: '#00ff00',
+                        borderWidth: 2,
+                        pointRadius: 3,
+                        tension: 0.4,
+                        borderDash: [8, 4],
+                        opacity: 0.6
+                    },
+                    // SCENARIO 2: Optimistic (Blue)
+                    {
+                        label: 'Lando - Optimistic',
+                        data: [null, null, null, null, null, null, ...landoOpt],
+                        borderColor: '#00d4ff',
+                        borderWidth: 3,
+                        pointRadius: 4,
                         tension: 0.4,
                         borderDash: [12, 6]
                     },
                     {
-                        label: 'Conservative',
-                        data: [null, null, null, null, null, ...conservative],
-                        borderColor: '#ffaa00',
-                        backgroundColor: 'rgba(255, 170, 0, 0.08)',
+                        label: 'Oscar - Optimistic',
+                        data: [null, null, null, null, null, null, ...oscarOpt],
+                        borderColor: '#00d4ff',
                         borderWidth: 2.5,
+                        pointRadius: 3,
+                        tension: 0.4,
+                        borderDash: [12, 6],
+                        opacity: 0.8
+                    },
+                    {
+                        label: 'Max - Optimistic',
+                        data: [null, null, null, null, null, null, ...maxOpt],
+                        borderColor: '#00d4ff',
+                        borderWidth: 2,
+                        pointRadius: 3,
+                        tension: 0.4,
+                        borderDash: [12, 6],
+                        opacity: 0.6
+                    },
+                    // SCENARIO 3: Conservative (Orange)
+                    {
+                        label: 'Lando - Conservative',
+                        data: [null, null, null, null, null, null, ...landoCons],
+                        borderColor: '#ffaa00',
+                        borderWidth: 3,
                         pointRadius: 4,
-                        pointHoverRadius: 6,
-                        pointStyle: 'rect',
                         tension: 0.4,
                         borderDash: [4, 4]
                     },
                     {
-                        label: 'Best Case',
-                        data: [null, null, null, null, null, ...bestCase],
-                        borderColor: '#ff00ff',
-                        backgroundColor: 'rgba(255, 0, 255, 0.08)',
+                        label: 'Oscar - Conservative',
+                        data: [null, null, null, null, null, null, ...oscarCons],
+                        borderColor: '#ffaa00',
                         borderWidth: 2.5,
+                        pointRadius: 3,
+                        tension: 0.4,
+                        borderDash: [4, 4],
+                        opacity: 0.8
+                    },
+                    {
+                        label: 'Max - Conservative',
+                        data: [null, null, null, null, null, null, ...maxCons],
+                        borderColor: '#ffaa00',
+                        borderWidth: 2,
+                        pointRadius: 3,
+                        tension: 0.4,
+                        borderDash: [4, 4],
+                        opacity: 0.6
+                    },
+                    // SCENARIO 4: MAX ABSOLUTE DOMINANCE (Purple) - WINS ALL 6!
+                    {
+                        label: 'Lando - Max Dominance',
+                        data: [null, null, null, null, null, null, ...landoBest],
+                        borderColor: '#ff00ff',
+                        borderWidth: 3,
                         pointRadius: 4,
-                        pointHoverRadius: 6,
-                        pointStyle: 'rectRot',
                         tension: 0.4,
                         borderDash: [16, 8]
                     },
                     {
-                        label: 'Mixed Realistic',
-                        data: [null, null, null, null, null, ...mixedRealistic],
-                        borderColor: '#ff4444',
-                        backgroundColor: 'rgba(255, 68, 68, 0.08)',
+                        label: 'Oscar - Max Dominance',
+                        data: [null, null, null, null, null, null, ...oscarBest],
+                        borderColor: '#ff00ff',
                         borderWidth: 2.5,
+                        pointRadius: 3,
+                        tension: 0.4,
+                        borderDash: [16, 8],
+                        opacity: 0.8
+                    },
+                    {
+                        label: 'Max - ABSOLUTE DOMINANCE',
+                        data: [null, null, null, null, null, null, ...maxBest],
+                        borderColor: '#ff00ff',
+                        borderWidth: 4,
+                        pointRadius: 6,
+                        tension: 0.4,
+                        borderDash: [16, 8],
+                        pointStyle: 'star'
+                    },
+                    // SCENARIO 5: Mixed (Red)
+                    {
+                        label: 'Lando - Mixed',
+                        data: [null, null, null, null, null, null, ...landoMixed],
+                        borderColor: '#ff4444',
+                        borderWidth: 3,
                         pointRadius: 4,
-                        pointHoverRadius: 6,
-                        pointStyle: 'crossRot',
                         tension: 0.4,
                         borderDash: [10, 5]
+                    },
+                    {
+                        label: 'Oscar - Mixed',
+                        data: [null, null, null, null, null, null, ...oscarMixed],
+                        borderColor: '#ff4444',
+                        borderWidth: 2.5,
+                        pointRadius: 3,
+                        tension: 0.4,
+                        borderDash: [10, 5],
+                        opacity: 0.8
+                    },
+                    {
+                        label: 'Max - Mixed',
+                        data: [null, null, null, null, null, null, ...maxMixed],
+                        borderColor: '#ff4444',
+                        borderWidth: 2,
+                        pointRadius: 3,
+                        tension: 0.4,
+                        borderDash: [10, 5],
+                        opacity: 0.6
                     }
                 ]
             },
@@ -738,16 +1075,10 @@
                     mode: 'index',
                     intersect: false,
                 },
-                // --- ADDED THIS ANIMATION BLOCK ---
-                animation: {
-                    duration: 2000, // 2 seconds to draw the lines
-                    easing: 'easeInOutQuad' // Smooth start and end
-                },
-                // ----------------------------------
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Destiny Path: Oscar\'s Lead Over Max',
+                        text: 'F1 2025 Championship Battle - All Scenarios (Including Max Miracle)',
                         color: '#fff',
                         font: {
                             size: 20,
@@ -783,26 +1114,8 @@
                                 return (isSprint ? '✨ ' : '🏁 ') + label;
                             },
                             label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.parsed.y !== null) {
-                                    const gap = Math.abs(context.parsed.y);
-                                    if (context.parsed.y === 0) {
-                                        label += '✨ DESTINY ALIGNED - TIED!';
-                                    } else {
-                                        const leader = context.parsed.y > 0 ? 'Oscar' : 'Max';
-                                        label += `${leader} leads by ${gap} points`;
-                                    }
-                                }
-                                return label;
-                            },
-                            afterLabel: function(context) {
-                                const idx = context.dataIndex;
-                                if (idx === 4) return ['Max: P1 (8 pts)', 'Oscar: DNF (0 pts)', '⚡ Max gained: +8 pts'];
-                                if (idx === 5) return ['Max: P1 (25 pts)', 'Oscar: P5 (10 pts)', '⚡ Max gained: +15 pts'];
-                                return null;
+                                const value = context.parsed.y;
+                                return `${context.dataset.label}: ${value} pts`;
                             }
                         }
                     }
@@ -826,9 +1139,9 @@
                             callback: function(value, index) {
                                 const label = this.getLabelForValue(value);
                                 const isSprint = label.includes('Sprint');
-                                const isAustin = label.includes('Austin');
+                                const isMexico = label.includes('Mexico');
                                 let prefix = '';
-                                if (isAustin) prefix = '✅ ';
+                                if (isMexico) prefix = '✅ ';
                                 if (isSprint) prefix += '✨ ';
                                 return prefix + label;
                             }
@@ -838,19 +1151,10 @@
                         }
                     },
                     y: {
+                        min: 200,
+                        max: 460,
                         grid: {
-                            color: function(context) {
-                                if (context.tick.value === 0) {
-                                    return 'rgba(0, 255, 136, 0.3)';
-                                }
-                                return 'rgba(255, 255, 255, 0.05)';
-                            },
-                            lineWidth: function(context) {
-                                if (context.tick.value === 0) {
-                                    return 3;
-                                }
-                                return 1;
-                            }
+                            color: 'rgba(255, 255, 255, 0.05)'
                         },
                         ticks: {
                             color: 'rgba(255, 255, 255, 0.6)',
@@ -859,11 +1163,7 @@
                                 weight: '500',
                                 family: 'Inter'
                             },
-                            callback: function(value) {
-                                if (value === 0) return '✨ DESTINY POINT ✨';
-                                return value > 0 ? `Oscar +${value}` : `Max +${Math.abs(value)}`;
-                            },
-                            stepSize: 10,
+                            stepSize: 20,
                             padding: 10
                         },
                         border: {
@@ -871,7 +1171,7 @@
                         },
                         title: {
                             display: true,
-                            text: 'Championship Energy Flow',
+                            text: 'Championship Points',
                             color: 'rgba(255, 255, 255, 0.8)',
                             font: {
                                 size: 14,
@@ -898,7 +1198,7 @@
                         const yBottom = yAxis.bottom;
                         
                         const gradient = ctx.createLinearGradient(x, yTop, x, yBottom);
-                        gradient.addColorStop(0, index === 4 ? 'rgba(0, 255, 136, 0.15)' : 'rgba(255, 215, 0, 0.08)');
+                        gradient.addColorStop(0, 'rgba(255, 215, 0, 0.08)');
                         gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
                         
                         ctx.fillStyle = gradient;
