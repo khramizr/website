@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F1 2025 - Championship Manifestation</title>
+    <title>F1 2025 - Championship Manifestation (for max)</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -60,6 +60,18 @@
         
         html {
             scroll-behavior: smooth;
+        }
+
+        /* Viewing Note */
+        .viewing-note {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            position: relative;
+            z-index: 10;
         }
         
         .container {
@@ -314,6 +326,18 @@
         .chart-wrapper:hover {
             border-color: rgba(255, 255, 255, 0.2);
             box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Data Note */
+        .data-note {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            font-style: italic;
+            margin-top: 20px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
         }
         
         /* Legend */
@@ -638,6 +662,10 @@
     </style>
 </head>
 <body>
+    <div class="viewing-note">
+        💡 Best viewed on PC or in landscape mode on mobile phone
+    </div>
+
     <div class="container">
         <div class="hero">
             <h1>Championship Manifestation</h1>
@@ -645,7 +673,7 @@
         </div>
         
         <div class="update-banner">
-            🏆 MEXICO GP UPDATE: Lando takes the lead! 357-356-321 • The championship fight intensifies!
+             MEXICO GP UPDATE: Lando takes the lead! 357-356-321 • The championship fight intensifies!
         </div>
 
         <div class="stats-grid">
@@ -672,6 +700,9 @@
         <section class="chart-section">
             <div class="chart-wrapper">
                 <canvas id="championshipChart"></canvas>
+            </div>
+            <div class="data-note">
+                📊 All the data are manually calculated
             </div>
         </section>
 
@@ -805,9 +836,9 @@
         <div class="info-box glass-card">
             <h3>✨ Championship Analysis - Post Mexico GP</h3>
             <ul>
-                <li><strong>Current Leader:</strong> Lando Norris - 357 points 🥇</li>
+                <li><strong>Current Leader:</strong> Lando Norris - 357 points </li>
                 <li><strong>The Math:</strong> Lando leads Oscar by 1 pt | Oscar 35 pts ahead of Max</li>
-                <li><strong>Max's Zandvoort Comeback:</strong> Closed 69 points gap (104→35) in 7 races! 🔥</li>
+                <li><strong>Max's Zandvoort Comeback:</strong> Closed 69 points gap (104→35) in 7 races! </li>
                 <li><strong>Recent Form (Last 4):</strong> Max +12/race | Lando +11.25/race | Oscar +5/race</li>
                 <li><strong>Overall Form (From Zandvoort):</strong> Max +16.6/race | Lando +11.7/race | Oscar +6.7/race</li>
                 <li><strong>The MIRACLE Scenario:</strong> Max can WIN if he takes all 6 remaining events (437 pts) + Lando struggles</li>
